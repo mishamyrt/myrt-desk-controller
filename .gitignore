@@ -1,0 +1,4 @@
+src/secret.h
+dist
+.vscode
+.pio
