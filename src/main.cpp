@@ -6,13 +6,11 @@
 #include "Bekant.h"
 #include "CommandServer.h"
 
-#define BUTTON_UP D5
-#define BUTTON_DOWN D6
-#define BUTTON_STAND D2
-#define BUTTON_SEAT D1
+#define BUTTON_UP D6
+#define BUTTON_DOWN D5
 
-#define OEM_UP D7
-#define OEM_DOWN D8
+#define OEM_UP D1
+#define OEM_DOWN D2
 
 Bekant desk;
 
@@ -36,8 +34,6 @@ void setup() {
   // Buttons
   pinMode(BUTTON_UP, INPUT);
   pinMode(BUTTON_DOWN, INPUT);
-  pinMode(BUTTON_STAND, INPUT);
-  pinMode(BUTTON_SEAT, INPUT);
   // Built'in LED
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -72,19 +68,4 @@ void loop() {
 
   desk.handleAction();
   handleClient();
-  // } else if (digitalRead(BUTTON_SEAT)) {
-  //   Serial.println("Button seat");
-  //   is_pressed = true;
-  //   desk.moveUp();
-  //   delay((350 / speed) + START_DELAY);
-  //   desk.stop();
-  // } else if (digitalRead(BUTTON_STAND)) {
-  //   Serial.println("Button stand");
-  //   delay((350 / speed) + START_DELAY);
-  //   is_pressed = true;
-  // } else {
-  //   is_pressed = false;
-  //   desk.stop();
-  // }
-  // digitalWrite(LED_BUILTIN, !is_pressed);
 }
