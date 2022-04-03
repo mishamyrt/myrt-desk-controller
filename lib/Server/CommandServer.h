@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Bekant.h"
+#include "ESP8266WebServer.h"
+#include "WiFiClient.h"
 
-void createCommandServer(Bekant *controller);
-void handleClient();
+extern ESP8266WebServer Server;

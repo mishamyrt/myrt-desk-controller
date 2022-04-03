@@ -9,7 +9,7 @@
 #define MIN_HEIGHT 650
 #define MAX_HEIGHT 1250
 
-class Bekant {
+class BekantHeight {
   public:
     void initialize(uint8_t up, uint8_t down) {
       pin_up = up;
@@ -27,7 +27,7 @@ class Bekant {
       return height;
     }
 
-    void handleAction() {
+    void handle() {
       if (isReady()) return;
       switch (state) {
         case STATE_CALIBRATION:
@@ -39,7 +39,7 @@ class Bekant {
         }
     }
 
-    void moveUp() {
+    void increase() {
       if (height >= MAX_HEIGHT) {
         return;
       }
@@ -59,7 +59,7 @@ class Bekant {
       }
     }
 
-    void moveDown() {
+    void decrease() {
       if (height <= MIN_HEIGHT) {
         return;
       }
@@ -79,8 +79,10 @@ class Bekant {
       }
     }
 
-    void stopMovement() {
-      stop();
+    void stop() {
+      digitalWrite(pin_down, LOW);
+      digitalWrite(pin_up, LOW);
+      state = STATE_READY;
     }
 
     void calibrate() {
@@ -121,12 +123,6 @@ class Bekant {
       digitalWrite(pin_up, HIGH);
     }
 
-    void stop() {
-      digitalWrite(pin_down, LOW);
-      digitalWrite(pin_up, LOW);
-      state = STATE_READY;
-    }
-
     void handleTarget() {
       now = millis();
       uint16_t diff = (now - action_start) * SPEED;
@@ -148,6 +144,5 @@ class Bekant {
       height = MIN_HEIGHT;
       initial_height = height;
       state = STATE_READY;
-      Serial.println("Calibrated");
     }
 };

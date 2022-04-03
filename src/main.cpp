@@ -3,8 +3,11 @@
 #include "ESP8266WiFi.h"
 #include "secret.h"
 
+#include "Blink.h"
 #include "Bekant.h"
+#include "Lightstrip.h"
 #include "CommandServer.h"
+#include "./handlers/handlers.h"
 
 #define BUTTON_UP D6
 #define BUTTON_DOWN D5
@@ -12,60 +15,52 @@
 #define OEM_UP D1
 #define OEM_DOWN D2
 
-Bekant desk;
-
 bool up_pressed;
 bool down_pressed;
-uint16_t height;
+
+BekantHeight Height;
+Lightstrip Light;
 
 void setup() {
-  Serial.begin(9600);
-  desk.initialize(OEM_UP, OEM_DOWN);
-  createCommandServer(&desk);
-  // WiFi
+  // Setup wifi connection
+  WiFi.hostname("workplace-controller");
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
   }
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  // Buttons
+  // Setup connection with light and height controllers;
+  Height.initialize(OEM_UP, OEM_DOWN);
+  Light.initialize(115200, D0);
+  Light.setColor(128, 255, 0, 0);
+  // Setup and disable LED
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+  // Setup buttons for manual height adjustment
   pinMode(BUTTON_UP, INPUT);
   pinMode(BUTTON_DOWN, INPUT);
-  // Built'in LED
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(600);
-  digitalWrite(LED_BUILTIN, HIGH);
+  // Setup request handlers and start server
+  registerStatusHandler();
+  registerLightHandlers(&Light);
+  Server.begin();
+  blink(3);
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    height = Serial.parseInt();
-    Serial.println("Got value");
-    Serial.println(height);
-    desk.moveTo(height);
-  }
-
   if (digitalRead(BUTTON_UP)) {
     up_pressed = true;
-    desk.moveUp();
+    Height.increase();
   } else if (up_pressed) {
     up_pressed = false;
-    desk.stopMovement();
+    Height.stop();
   }
 
   if (digitalRead(BUTTON_DOWN)) {
     down_pressed = true;
-    desk.moveDown();
+    Height.decrease();
   } else if (down_pressed) {
     down_pressed = false;
-    desk.stopMovement();
+    Height.stop();
   }
-
-
-  desk.handleAction();
-  handleClient();
+  Height.handle();
+  Server.handleClient();
 }
