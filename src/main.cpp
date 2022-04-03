@@ -7,6 +7,7 @@
 #include "Bekant.h"
 #include "Lightstrip.h"
 #include "CommandServer.h"
+#include "OTA.h"
 #include "./handlers/handlers.h"
 
 #define BUTTON_UP D6
@@ -24,6 +25,7 @@ Lightstrip Light;
 void setup() {
   // Setup wifi connection
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.setHostname("MyrtDesk");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
@@ -31,6 +33,7 @@ void setup() {
   Height.initialize(OEM_UP, OEM_DOWN);
   Light.initialize(115200, D0);
   Light.setColor(128, 255, 0, 0);
+  OTA.initialize();
   // Setup and disable LED
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
@@ -45,6 +48,7 @@ void setup() {
 }
 
 void loop() {
+
   if (digitalRead(BUTTON_UP)) {
     up_pressed = true;
     Height.increase();
@@ -62,4 +66,5 @@ void loop() {
   }
   Height.handle();
   Server.handleClient();
+  OTA.handle();
 }
