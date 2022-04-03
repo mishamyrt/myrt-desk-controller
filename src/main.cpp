@@ -1,8 +1,8 @@
 #include "Arduino.h"
 #include "WiFiClient.h"
 #include "ESP8266WiFi.h"
-#include "secret.h"
 
+#include "secrets.h"
 #include "Blink.h"
 #include "Bekant.h"
 #include "Lightstrip.h"
@@ -23,7 +23,6 @@ Lightstrip Light;
 
 void setup() {
   // Setup wifi connection
-  WiFi.hostname("workplace-controller");
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);

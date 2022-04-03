@@ -1,4 +1,4 @@
-src/secret.h
+include/secrets.h
 dist
 .vscode
 .pio
