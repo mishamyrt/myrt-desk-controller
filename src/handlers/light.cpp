@@ -16,7 +16,8 @@ void registerLightHandlers(Lightstrip *light) {
 
   Server.on("/light/measure", []() {
     message.clear();
-    message["current"] = analogRead(A0);
+    // TODO: Move calibration to lib
+    message["current"] = map(analogRead(A0), 0, 1000, 0, 2000);
     sendJson();
   });
 
