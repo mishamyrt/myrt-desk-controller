@@ -13,8 +13,8 @@
 #define BUTTON_UP D6
 #define BUTTON_DOWN D5
 
-#define OEM_UP D1
-#define OEM_DOWN D2
+#define OEM_UP D2
+#define OEM_DOWN D1
 
 bool up_pressed;
 bool down_pressed;
@@ -43,6 +43,7 @@ void setup() {
   // Setup request handlers and start server
   registerStatusHandler();
   registerLightHandlers(&Light);
+  registerHeightHandlers(&Height);
   Server.begin();
   blink(3);
 }

@@ -14,6 +14,12 @@ void registerLightHandlers(Lightstrip *light) {
     sendJson();
   });
 
+  Server.on("/light/measure", []() {
+    message.clear();
+    message["current"] = analogRead(A0);
+    sendJson();
+  });
+
   Server.on("/light/power_on", [light]() {
     is_success = light->powerOn();
     message.clear();

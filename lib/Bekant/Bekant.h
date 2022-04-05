@@ -23,7 +23,7 @@ class BekantHeight {
       return state == STATE_READY;
     }
 
-    uint16_t getHeight() {
+    uint16_t get() {
       return height;
     }
 
@@ -91,7 +91,7 @@ class BekantHeight {
       writeDown();
     }
 
-    void moveTo(uint16_t target) {
+    void set(uint16_t target) {
       action_start = millis() + DELAY;
       target_height = target;
       initial_height = height;
