@@ -1,0 +1,8 @@
+#pragma once
+
+#define PIN_BUTTON_UP D6
+#define PIN_BUTTON_DOWN D5
+#define PIN_OEM_UP D2
+#define PIN_OEM_DOWN D1
+#define PIN_LIGHTSTRIP_RESET D0
+#define PIN_PHOTORESISTOR A0
