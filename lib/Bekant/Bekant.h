@@ -11,11 +11,14 @@
 
 class BekantHeight {
   public:
-    void initialize(uint8_t up, uint8_t down) {
+    BekantHeight(uint8_t up, uint8_t down) {
       pin_up = up;
       pin_down = down;
       pinMode(pin_up, OUTPUT);
       pinMode(pin_down, OUTPUT);
+    }
+
+    void initialize() {
       calibrate();
     }
 

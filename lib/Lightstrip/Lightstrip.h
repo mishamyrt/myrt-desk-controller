@@ -8,6 +8,10 @@ typedef uint8_t RGB[3];
 /// Dap lightstrip integration
 class Lightstrip {
   public:
+    Lightstrip(uint8_t pin) {
+      reset_pin = pin;
+    }
+
     // Let the state variables be public, too lazy to make getters.
     bool enabled;
     uint8 brightness;
@@ -16,8 +20,8 @@ class Lightstrip {
     uint8_t b;
 
     /// Setup serial connection with Dap enabled device on UART2
-    void initialize(unsigned long baud, uint8_t pin) {
-      reset_pin = pin;
+    void initialize(unsigned long baud = 115200) {
+
       pinMode(reset_pin, OUTPUT);
       digitalWrite(reset_pin, HIGH);
       Serial.begin(baud);
