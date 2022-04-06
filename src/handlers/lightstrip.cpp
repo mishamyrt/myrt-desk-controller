@@ -47,32 +47,3 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light) {
       server->sendStatus(is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
     });
 }
-
-// void registerLightstripOldHandlers(Lightstrip *light) {
-//   Server.on("/lightstrip", HTTP_GET, [light]() {
-//     message.clear();
-//     message["brightness"] = light->brightness;
-//     message["enabled"] = light->enabled;
-//     JsonArray color = message.createNestedArray("color");
-//     color.add(light->r);
-//     color.add(light->g);
-//     color.add(light->b);
-//     sendJson();
-//   });
-
-
-
-//   Server.on("/light/power_on", [light]() {
-//     is_success = light->powerOn();
-//     message.clear();
-//     message["status"] = is_success ? "ok" : "error";
-//     sendJson();
-//   });
-
-//   Server.on("/light/power_off", [light]() {
-//     is_success = light->powerOff();
-//     message.clear();
-//     message["status"] = is_success ? "ok" : "error";
-//     sendJson();
-//   });
-// }
