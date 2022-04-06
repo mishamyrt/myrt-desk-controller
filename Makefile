@@ -1,7 +1,7 @@
 .PHONY: compile
 
 compile:
-	pio run
+	pio run -e local
 flash:
 	pio run -e local -t upload
 flash-ota:
