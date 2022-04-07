@@ -41,6 +41,10 @@ class Lightstrip {
       // Reset controller and wait for initialization code
     }
 
+    bool setEffect(uint8_t effect) {
+      return writeMessage(2, COMMAND_START_EFFECT, effect);
+    }
+
     bool setColor(uint8_t brightness, uint8_t r, uint8_t g, uint8_t b) {
       this->enabled = true;
       this->brightness = brightness;
