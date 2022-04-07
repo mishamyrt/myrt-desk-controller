@@ -32,7 +32,9 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light) {
       server->sendStatus(is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
     })
     .put("/power", [server, light]() {
-      if (!server->parseMessage() || !message.containsKey(field_enabled)) {
+      if (!server->parseMessage()
+        || !message.containsKey(field_enabled)
+      ) {
         return server->sendStatus(REQUEST_BAD);
       }
       if (message[field_enabled] == light->enabled) {

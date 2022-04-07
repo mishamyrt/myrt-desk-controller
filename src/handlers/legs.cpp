@@ -10,7 +10,9 @@ void registerLegsHandlers(mServer *server, BekantHeight *height) {
       server->send();
     })
     .put([server, height]() {
-      if (!server->parseMessage() || !message.containsKey(field_height)) {
+      if (!server->parseMessage()
+        || !message.containsKey(field_height)
+      ) {
         return server->sendStatus(REQUEST_BAD);
       }
       height->set(message[field_height]);
