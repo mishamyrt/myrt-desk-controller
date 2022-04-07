@@ -4,6 +4,7 @@
 const char *field_brightness = "brightness";
 const char *field_enabled = "enabled";
 const char *field_color = "color";
+const char *field_active = "active";
 
 void registerLightstripHandlers(mServer *server, Lightstrip *light) {
   server->addRoute("/lightstrip")
@@ -15,6 +16,15 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light) {
       color.add(light->g);
       color.add(light->b);
       server->send();
+    })
+    .put("/effects", [server, light]() {
+      if (!server->parseMessage()
+        || !message.containsKey(field_active)
+      ) {
+        return server->sendStatus(REQUEST_BAD);
+      }
+      bool is_success = light->setEffect(message[field_active]);
+      server->sendStatus(is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
     })
     .put("/color", [server, light]() {
       if (!server->parseMessage()

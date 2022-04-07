@@ -56,6 +56,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActionStatus'
+  /lightstrip/effects:
+    put:
+      tags:
+      - lightstrip
+      summary: Задать активный эффект
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EffectRequest'
+      responses:
+        200:
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionStatus'
+        400:
+          description: Не хватает параметров или входной JSON невозможно прочитать
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionStatus'
+        500:
+          description: Контроллер ленты ответил ошибкой
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionStatus'
   /lightstrip/power:
     put:
       tags:
@@ -163,6 +193,12 @@ paths:
 
 components:
   schemas:
+    EffectRequest:
+      type: object
+      properties:
+        active:
+          type: integer
+          format: int32
     IlluminanceState:
       type: object
       properties:
