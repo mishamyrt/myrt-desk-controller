@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ESP8266WebServer.h"
-#include "Client.h"
-#include "ArduinoJson.h"
+#include <ESPAsyncWebServer.h>
+#include <ArduinoJson.h>
+#include <AsyncJson.h>
 #include "mRouter.h"
 #include "./include/strings.h"
 
@@ -17,52 +17,34 @@ extern StaticJsonDocument<200> message;
 /// Wrappper around ESP8266WebServer for convenience
 class mServer {
   public:
-    mServer(ESP8266WebServer *esp_server) {
-      server = esp_server;
+    mServer(AsyncWebServer *server) {
+      this->server = server;
     }
 
     void initialize() {
       server->begin();
     }
 
-    void handle() {
-      server->handleClient();
-    }
-
-    bool parseMessage() {
-      if (!server->hasArg("plain")) {
-        return false;
-      }
-      message.clear();
-      DeserializationError error = deserializeJson(
-        message,
-        server->arg("plain")
-      );
-      if (error) {
-        return false;
-      }
-      return true;
-    }
-
-    void sendStatus(RequestStatus status) {
-      message.clear();
+    void sendStatus(AsyncWebServerRequest *request, RequestStatus status) {
+      DynamicJsonDocument doc(64);
+      AsyncResponseStream *response = request->beginResponseStream(JSON_MIMETYPE);
       switch (status) {
         case REQUEST_SUCCESS:
-          message[field_description] = "Success";
-          return send(200);
+          doc[field_description] = "Success";
+          response->setCode(200);
+          break;
         case REQUEST_BAD:
-          message[field_description] = "Wrong data passed";
-          return send(400);
+          doc[field_description] = "Wrong data passed";
+          response->setCode(400);
+          break;
         case REQUEST_ERROR:
-          message[field_description] = "Internal error";
-          return send(500);
+          doc[field_description] = "Internal error";
+          response->setCode(500);
+          break;
       }
-    }
-
-    void send(int code = 200) {
-      response_length = serializeJson(message, response_buffer);
-      message.clear();
-      server->send(code, json_mime, response_buffer, response_length);
+      response_length = serializeJson(doc, response_buffer);
+      response->write(response_buffer, response_length);
+      request->send(response);
     }
 
     mRouter addRoute(String prefix) {
@@ -70,7 +52,7 @@ class mServer {
     }
 
   private:
-    ESP8266WebServer *server;
+    AsyncWebServer *server;
     char response_buffer[200];
     size_t response_length;
 };

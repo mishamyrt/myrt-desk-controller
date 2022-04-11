@@ -1,2 +1,5 @@
-const char *field_description = "description";
-const char *json_mime = "application/json";
+#include <Arduino.h>
+
+const char *field_description PROGMEM = "description";
+const char *field_body PROGMEM = "plain";
+const char *root = "/";

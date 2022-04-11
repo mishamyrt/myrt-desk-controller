@@ -1,35 +1,40 @@
 #include "Arduino.h"
 #include "WiFiClient.h"
 #include "ESP8266WiFi.h"
-#include "ESP8266WebServer.h"
+#include <ESPAsyncWebServer.h>
 
 #include "secrets.h"
 #include "pins.h"
 #include "Blink.h"
 #include "Bekant.h"
 #include "Lightstrip.h"
+#include "AVRLord.h"
 #include "OTA.h"
 #include "mServer.h"
 #include "Illuminance.h"
 #include "handlers.h"
 
 // mServer
-ESP8266WebServer ESPServer(80);
-mServer Server(&ESPServer);
+AsyncWebServer AsyncServer(80);
+mServer Server(&AsyncServer);
 
 // I/O devices
 BekantHeight Height(PIN_OEM_UP, PIN_OEM_DOWN);
-Lightstrip Light(PIN_LIGHTSTRIP_RESET);
+AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
+FirmwareReader Reader = FirmwareReader();
+Lightstrip Light(&LightAVR);
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
 bool up_pressed;
 bool down_pressed;
 
 void setup() {
+  Serial.begin(57600);
   // Setup light controller
   Light.initialize();
   // TODO: Replace with progress
   Light.setColor(10, 50, 0, 255);
+  Light.handle();
   // Setup wifi connection
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   WiFi.setHostname("MyrtDesk");
@@ -38,6 +43,7 @@ void setup() {
     delay(500);
   }
   Light.setColor(30, 40, 255, 0);
+  Light.handle();
   // Setup height controllers;
   Height.initialize();
   OTA.initialize();
@@ -49,12 +55,13 @@ void setup() {
   pinMode(PIN_BUTTON_DOWN, INPUT);
   // Setup request handlers and start server
   registerDescribeHandler(&Server);
-  registerLightstripHandlers(&Server, &Light);
+  registerLightstripHandlers(&Server, &Light, &Reader);
   registerLegsHandlers(&Server, &Height);
   registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
   blink(3);
   Light.powerOff();
+  Light.handle();
 }
 
 void loop() {
@@ -74,6 +81,6 @@ void loop() {
     Height.stop();
   }
   Height.handle();
-  Server.handle();
+  Light.handle();
   OTA.handle();
 }

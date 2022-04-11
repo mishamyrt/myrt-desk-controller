@@ -3,8 +3,11 @@
 
 void registerSensorHandlers(mServer *server, IlluminanceSensor *illuminance) {
   server->addRoute("/sensors")
-    .get("/illuminance", [server, illuminance]() {
-      message["value"] = illuminance->getValue();
-      server->send();
+    .get("/illuminance", [illuminance](AsyncWebServerRequest *request) {
+      AsyncJsonResponse * response = new AsyncJsonResponse();
+      JsonVariant& json = response->getRoot();
+      json["value"] = illuminance->getValue();
+      response->setLength();
+      request->send(response);
     });
 }

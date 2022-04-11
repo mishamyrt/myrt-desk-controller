@@ -108,9 +108,9 @@ class BekantHeight {
 
   private:
     uint8_t state;
-    uint16_t initial_height;
-    uint16_t height;
-    uint16_t target_height;
+    uint16_t initial_height = MIN_HEIGHT;
+    uint16_t height = MIN_HEIGHT;
+    uint16_t target_height = MIN_HEIGHT;
     uint32_t action_start;
     uint32_t action_end;
     uint32_t now;
