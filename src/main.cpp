@@ -29,21 +29,21 @@ bool up_pressed;
 bool down_pressed;
 
 void setup() {
+  // Setup wifi connection
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.setHostname("MyrtDesk");
+  MDNS.begin("MyrtDesk");
   Serial.begin(57600);
   // Setup light controller
   Light.initialize();
   // TODO: Replace with progress
   Light.setColor(10, 50, 0, 255);
   Light.handle();
-  // Setup wifi connection
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  WiFi.setHostname("MyrtDesk");
-  MDNS.begin("MyrtDesk");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
-  Light.setColor(30, 40, 255, 0);
-  Light.handle();
+  // Light.setColor(30, 40, 255, 0);
+  // Light.handle();
   // Setup height controllers;
   Height.initialize();
   OTA.initialize();
@@ -60,8 +60,7 @@ void setup() {
   registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
   blink(3);
-  Light.powerOff();
-  Light.handle();
+  Light.writePowerOff();
 }
 
 void loop() {

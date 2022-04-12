@@ -4,15 +4,22 @@
 #include "Blink.h"
 #include "AVRLord.h"
 #include "FirmwareReader.h"
+#include "OTAListener.h"
+#include "OTA.h"
 
 typedef uint8_t RGB[3];
 
 /// Dap lightstrip integration
-class Lightstrip : public AVRUpdater {
+class Lightstrip : public AVRUpdater, public OTAListener {
   public:
     Lightstrip(AVRLord *avr) {
       this->avr = avr;
       avr->setUpdater(this);
+      OTA.setListener(this);
+    }
+
+    void onOTAStart() {
+      writePowerOff();
     }
 
     void handle() {
@@ -24,21 +31,29 @@ class Lightstrip : public AVRUpdater {
           writeMessage(2, COMMAND_START_EFFECT, effect);
           break;
         case ACTION_UPDATE:
+          onOTAStart();
+          action = ACTION_NONE;
           avr->flash(reader);
-          break;
+          return;
         case ACTION_POWER_OFF:
-          writeMessage(1, COMMAND_POWER_OFF);
+          writePowerOff();
           break;
         case ACTION_POWER_ON:
           writeMessage(4, COMMAND_POWER_ON, r, g, b);
+          break;
+        case ACTION_SET_TEMPERATURE:
+          writeMessage(3, COMMAND_SET_TEMPERATURE, brightness, temperature);
           break;
       }
       action = ACTION_NONE;
     }
 
+    bool writePowerOff() {
+      return writeMessage(1, COMMAND_POWER_OFF);
+    }
+
     void handleUpdateDone(bool is_success) {
-      if (is_success) {
-        initialize();
+      if (is_success && initialize()) {
         ESP.reset();
       }
     }
@@ -50,6 +65,7 @@ class Lightstrip : public AVRUpdater {
     uint8_t g;
     uint8_t b;
     uint8_t effect;
+    uint8_t temperature;
 
     /// Setup serial connection with Dap enabled device on UART
     bool initialize() {
@@ -67,7 +83,7 @@ class Lightstrip : public AVRUpdater {
     }
 
     bool updateFirmware(FirmwareReader *reader) {
-      if (action != ACTION_NONE) {
+      if (!isReady()) {
         return false;
       }
       this->reader = reader;
@@ -76,7 +92,7 @@ class Lightstrip : public AVRUpdater {
     }
 
     bool setEffect(uint8_t effect) {
-      if (action != ACTION_NONE) {
+      if (!isReady()) {
         return false;
       }
       this->effect = effect;
@@ -84,8 +100,19 @@ class Lightstrip : public AVRUpdater {
       return true;
     }
 
+    bool setTemperature(uint8_t brightness, uint8_t temperature) {
+      if (!isReady()) {
+        return false;
+      }
+      this->enabled = true;
+      this->brightness = brightness;
+      this->temperature = temperature;
+      action = ACTION_SET_TEMPERATURE;
+      return true;
+    }
+
     bool setColor(uint8_t brightness, uint8_t r, uint8_t g, uint8_t b) {
-      if (action != ACTION_NONE) {
+      if (!isReady()) {
         return false;
       }
       this->enabled = true;
@@ -126,9 +153,10 @@ class Lightstrip : public AVRUpdater {
       COMMAND_POWER_ON = 1,
       COMMAND_SET_COLOR = 2,
       COMMAND_SET_COLOR_ZONES = 3,
-      COMMAND_START_EFFECT = 4
+      COMMAND_START_EFFECT = 4,
+      COMMAND_SET_TEMPERATURE = 5,
     };
-
+    // TODO: ↓ Merge this enums ↑
     enum {
       ACTION_NONE,
       ACTION_SET_COLOR,
@@ -136,15 +164,20 @@ class Lightstrip : public AVRUpdater {
       ACTION_POWER_ON,
       ACTION_POWER_OFF,
       ACTION_UPDATE,
+      ACTION_SET_TEMPERATURE,
     };
 
     enum {
       CODE_SUCCESS = 0xEE,
-      CODE_ERROR = 0xFF
+      CODE_ERROR = 0xFF,
     };
 
     void clearBuffer() {
       while (Serial.read() != -1) {}
+    }
+
+    bool isReady() {
+      return action == ACTION_NONE;
     }
 
     bool hasMessage() {

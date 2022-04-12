@@ -7,6 +7,7 @@ const char *field_brightness PROGMEM = "brightness";
 const char *field_enabled PROGMEM = "enabled";
 const char *field_color PROGMEM = "color";
 const char *field_active PROGMEM = "active";
+const char *field_temperature PROGMEM = "temperature";
 
 void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareReader *reader) {
 
@@ -33,15 +34,25 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
     })
 
     .put("/color", [server, light](AsyncWebServerRequest *request, JsonVariant &json) {
-      if (!json.containsKey(field_brightness) || !json.containsKey(field_color)) {
+      if (!json.containsKey(field_brightness)
+        ||!(json.containsKey(field_color) || json.containsKey(field_temperature))
+        ) {
         return server->sendStatus(request, REQUEST_BAD);
       }
-      bool planned = light->setColor(
-        json["brightness"],
-        json["color"][0],
-        json["color"][1],
-        json["color"][2]
-      );
+      bool planned;
+      if (json.containsKey(field_color)) {
+        planned = light->setColor(
+          json["brightness"],
+          json["color"][0],
+          json["color"][1],
+          json["color"][2]
+        );
+      } else {
+        planned = light->setTemperature(
+          json[field_brightness],
+          json[field_temperature]
+        );
+      }
       server->sendStatus(request, planned ? REQUEST_SUCCESS : REQUEST_ERROR);
     })
 
