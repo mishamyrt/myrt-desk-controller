@@ -16,6 +16,7 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
       AsyncJsonResponse * response = new AsyncJsonResponse();
       JsonVariant& json = response->getRoot();
       json[field_brightness] = light->brightness;
+      json[field_temperature] = light->temperature;
       json[field_enabled] = light->enabled;
       JsonArray color = json.createNestedArray(field_color);
       color.add(light->r);
