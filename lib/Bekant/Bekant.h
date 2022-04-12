@@ -19,7 +19,8 @@ class BekantHeight {
     }
 
     void initialize() {
-      calibrate();
+      // TODO: Load data from EEPROM
+      // https://randomnerdtutorials.com/esp32-flash-memory/
     }
 
     bool isReady() {
