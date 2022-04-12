@@ -28,7 +28,11 @@ class Lightstrip : public AVRUpdater, public OTAListener {
           writeMessage(5, COMMAND_SET_COLOR, brightness, r, g, b);
           break;
         case ACTION_SET_EFFECT:
-          writeMessage(2, COMMAND_START_EFFECT, effect);
+          if (effect == 3) {
+            writeMessage(5, COMMAND_START_EFFECT, effect, p_r, p_g, p_b);
+          } else {
+            writeMessage(2, COMMAND_START_EFFECT, effect);
+          }
           break;
         case ACTION_UPDATE:
           onOTAStart();
@@ -64,6 +68,9 @@ class Lightstrip : public AVRUpdater, public OTAListener {
     uint8_t r;
     uint8_t g;
     uint8_t b;
+    uint8_t p_r;
+    uint8_t p_g;
+    uint8_t p_b;
     uint8_t effect;
     uint8_t temperature;
 
@@ -88,6 +95,16 @@ class Lightstrip : public AVRUpdater, public OTAListener {
       }
       this->reader = reader;
       action = ACTION_UPDATE;
+      return true;
+    }
+
+    bool setProgressColor(uint8_t nr, uint8_t ng, uint8_t nb) {
+      if (!isReady()) {
+        return false;
+      }
+      p_r = nr;
+      p_g = ng;
+      p_b = nb;
       return true;
     }
 
@@ -147,7 +164,6 @@ class Lightstrip : public AVRUpdater, public OTAListener {
     uint8_t message_buffer[128];
     uint8_t message_length;
     uint8_t action = ACTION_NONE;
-
     enum {
       COMMAND_POWER_OFF = 0,
       COMMAND_POWER_ON = 1,
@@ -165,6 +181,7 @@ class Lightstrip : public AVRUpdater, public OTAListener {
       ACTION_POWER_OFF,
       ACTION_UPDATE,
       ACTION_SET_TEMPERATURE,
+      ACTION_SET_PROGRESS_COLOR
     };
 
     enum {

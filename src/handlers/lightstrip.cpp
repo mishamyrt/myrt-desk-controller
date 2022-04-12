@@ -34,6 +34,18 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
       server->sendStatus(request, is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
     })
 
+    .put("/progress", [light, server](AsyncWebServerRequest *request, JsonVariant &json) {
+      if (!json.containsKey(field_color)) {
+        return server->sendStatus(request, REQUEST_BAD);
+      }
+      bool is_success = light->setProgressColor(
+        json[field_color][0],
+        json[field_color][1],
+        json[field_color][2]
+      );
+      server->sendStatus(request, is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
+    })
+
     .put("/color", [server, light](AsyncWebServerRequest *request, JsonVariant &json) {
       if (!json.containsKey(field_brightness)
         ||!(json.containsKey(field_color) || json.containsKey(field_temperature))
