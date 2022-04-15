@@ -1,10 +1,10 @@
-#include "Dap.h"
+#include "DapMaster.h"
 #include "DapRequest.h"
 #include "include/FIFO.h"
 #include "include/codes.h"
 
 /// Async connect to device. Response will be sent to *controller
-void Dap::connect() {
+void DapMaster::connect() {
   // Create fake request with sent state and increased timeout
   // It will cause status read on next step
   _started = false;
@@ -15,7 +15,7 @@ void Dap::connect() {
 }
 
 /// Sync entry point. Handles requests
-void Dap::handle() {
+void DapMaster::handle() {
   if ((_started && !_connected) || _requests.isEmpty()) {
     return;
   }
@@ -24,7 +24,7 @@ void Dap::handle() {
 }
 
 /// Sends message to connected device
-bool Dap::send(uint8_t *payload, uint8_t payload_length) {
+bool DapMaster::send(uint8_t *payload, uint8_t payload_length) {
   if (!_connected) {
     return false;
   }
@@ -34,20 +34,20 @@ bool Dap::send(uint8_t *payload, uint8_t payload_length) {
   return _addRequest(request);
 }
 
-bool Dap::send(uint8_t command) {
+bool DapMaster::send(uint8_t command) {
   uint8_t *message = new uint8_t[1];
   message[0] = command;
   return send(message, 1);
 }
 
-bool Dap::send(uint8_t command, uint8_t first) {
+bool DapMaster::send(uint8_t command, uint8_t first) {
   uint8_t *message = new uint8_t[2];
   message[0] = command;
   message[1] = first;
   return send(message, 2);
 }
 
-bool Dap::send(uint8_t command, uint8_t first, uint8_t second) {
+bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second) {
   uint8_t *message = new uint8_t[3];
   message[0] = command;
   message[1] = first;
@@ -55,7 +55,7 @@ bool Dap::send(uint8_t command, uint8_t first, uint8_t second) {
   return send(message, 3);
 }
 
-bool Dap::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third) {
+bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third) {
   uint8_t *message = new uint8_t[4];
   message[0] = command;
   message[1] = first;
@@ -64,7 +64,7 @@ bool Dap::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third) {
   return send(message, 4);
 }
 
-bool Dap::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, uint8_t fourth) {
+bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, uint8_t fourth) {
   uint8_t *message = new uint8_t[5];
   message[0] = command;
   message[1] = first;
@@ -74,7 +74,7 @@ bool Dap::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, ui
   return send(message, 5);
 }
 
-bool Dap::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, uint8_t fourth, uint8_t fifth) {
+bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, uint8_t fourth, uint8_t fifth) {
   uint8_t *message = new uint8_t[6];
   message[0] = command;
   message[1] = first;
@@ -86,7 +86,7 @@ bool Dap::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, ui
 }
 
 /// Handles dap request
-void Dap::_handleRequest(DapRequest *request) {
+void DapMaster::_handleRequest(DapRequest *request) {
   switch (request->state) {
     case D_CREATED:
       _sendMessage(request);
@@ -103,7 +103,7 @@ void Dap::_handleRequest(DapRequest *request) {
 }
 
 /// Reads response from dap device
-void Dap::_readResponse(DapRequest *request) {
+void DapMaster::_readResponse(DapRequest *request) {
   if (millis() >= request->expiry) {
     _onError();
     return;
@@ -136,7 +136,7 @@ void Dap::_readResponse(DapRequest *request) {
 }
 
 /// Sends message to dap device
-void Dap::_sendMessage(DapRequest *request) {
+void DapMaster::_sendMessage(DapRequest *request) {
   if (millis() < _next_request_time) {
     return;
   }
@@ -154,11 +154,11 @@ void Dap::_sendMessage(DapRequest *request) {
 }
 
 /// Adds request to queue
-bool Dap::_addRequest(DapRequest *request) {
+bool DapMaster::_addRequest(DapRequest *request) {
   return _requests.append(request);
 }
 
-void Dap::_clear() {
+void DapMaster::_clear() {
   while (!_requests.isEmpty()) {
     _deleteRequest(
       _requests.next()
@@ -166,7 +166,7 @@ void Dap::_clear() {
   }
 }
 
-void Dap::_deleteRequest(DapRequest *request) {
+void DapMaster::_deleteRequest(DapRequest *request) {
   if (request == NULL) return;
   if (request->payload != NULL) {
     delete [] request->payload;
@@ -174,7 +174,7 @@ void Dap::_deleteRequest(DapRequest *request) {
   delete request;
 }
 
-void Dap::_onError() {
+void DapMaster::_onError() {
   _clear();
   _connected = false;
   controller->onError();

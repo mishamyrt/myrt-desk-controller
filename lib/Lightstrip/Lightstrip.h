@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Arduino.h"
-#include "Dap.h"
+#include "DapMaster.h"
 #include "DapController.h"
 #include "AVRLord.h"
 #include "FirmwareReader.h"
@@ -18,7 +18,7 @@ struct RGB{
 
 class Lightstrip : public DapController {
   public:
-    Lightstrip(Dap *connection, AVRLord *board) {
+    Lightstrip(DapMaster *connection, AVRLord *board) {
       _data = connection;
       _data->setController(this);
       _board = board;
@@ -61,7 +61,7 @@ class Lightstrip : public DapController {
     uint8_t _connect_attempts;
 
     // External connections
-    Dap *_data;
+    DapMaster *_data;
     AVRLord *_board;
 
     // Lightstrip state

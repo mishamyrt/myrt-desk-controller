@@ -11,9 +11,9 @@
 #define DAP_STACK_SIZE 8
 #define DAP_TIMEOUT 2000
 
-class Dap {
+class DapMaster {
   public:
-    Dap(Stream *connection) {
+    DapMaster(Stream *connection) {
       _serial = connection;
     }
 

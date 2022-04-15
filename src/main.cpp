@@ -15,7 +15,7 @@
 #include "handlers.h"
 #include "Loggr.h"
 
-#include "Dap.h"
+#include "DapMaster.h"
 #include "Lightstrip.h"
 
 // Server
@@ -24,7 +24,7 @@ AsyncWebSocket ws("/events");
 mServer Server(&AsyncServer);
 
 // Async I/O devices
-Dap LightData(&Serial);
+DapMaster LightData(&Serial);
 AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 Lightstrip Light(&LightData, &LightAVR);
 
