@@ -24,7 +24,7 @@ class FirmwareReader {
     }
 
     void clear() {
-      delete[] data;
+      delete [] data;
       _size = 0;
     }
 

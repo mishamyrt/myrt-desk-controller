@@ -12,10 +12,5 @@ void registerDescribeHandler(mServer *server) {
       json["free_heap"] = ESP.getFreeHeap();
       response->setLength();
       request->send(response);
-    })
-    .get("/logs", [](AsyncWebServerRequest *request) {
-      AsyncResponseStream *response = request->beginResponseStream("text/plain");
-      response->print(Loggr.pop());
-      request->send(response);
     });
 }

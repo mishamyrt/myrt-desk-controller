@@ -2,6 +2,7 @@
 
 #include "Arduino.h"
 #include "FirmwareReader.h"
+#include "Loggr.h"
 #include "./include/commands.h"
 
 class AVRUpdater {
@@ -24,9 +25,7 @@ class AVRLord {
       this->reader = reader;
       address = 0;
       data_idx = 0;
-      bool success = flashAVR();
-      reader->clear();
-      updater->handleUpdateDone(success);
+      flashAVR();
     }
 
     void setUpdater(AVRUpdater *updater) {

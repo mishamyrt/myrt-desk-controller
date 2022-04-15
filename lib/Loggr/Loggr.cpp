@@ -1,3 +1,3 @@
 #include "Loggr.h"
 
-_Loggr Loggr;
+Loggr_ Loggr;

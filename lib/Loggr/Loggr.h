@@ -1,36 +1,29 @@
 #pragma once
 
-#include "Arduino.h"
-
-class _Loggr {
+#include "ESPAsyncWebServer.h"
+class Loggr_ {
   public:
-    void add (const char *fn_name, String content) {
-      journal += fn_name;
-      journal += " - ";
-      add(content);
+    String message;
+
+    void attach(AsyncWebSocket *stream) {
+      _stream = stream;
     }
 
-    void add (String content) {
-      journal += content;
-      journal += '\n';
+    void print(String content) {
+      _send(content);
     }
 
-    String pop() {
-      String ret = journal;
-      clear();
-      return ret;
-    }
-
-    String get() {
-      return journal;
-    }
-
-    void clear() {
-      journal = "";
+    void flush() {
+      _send(message);
+      message = "";
     }
 
   private:
-    String journal;
+    AsyncWebSocket *_stream;
+
+    void _send(String content) {
+      _stream->textAll(("log: " + content).c_str());
+    }
 };
 
-extern _Loggr Loggr;
+extern Loggr_ Loggr;

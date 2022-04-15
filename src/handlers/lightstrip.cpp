@@ -15,36 +15,37 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
     .get([light](AsyncWebServerRequest *request) {
       AsyncJsonResponse * response = new AsyncJsonResponse();
       JsonVariant& json = response->getRoot();
-      json[field_brightness] = light->brightness;
-      json[field_temperature] = light->temperature;
-      json[field_enabled] = light->enabled;
+      json[field_brightness] = light->brightness();
+      json[field_temperature] = light->temperature();
+      json[field_enabled] = light->enabled();
       JsonArray color = json.createNestedArray(field_color);
-      color.add(light->r);
-      color.add(light->g);
-      color.add(light->b);
+      RGB strip_color = light->color();
+      color.add(strip_color.r);
+      color.add(strip_color.g);
+      color.add(strip_color.b);
       response->setLength();
       request->send(response);
     })
 
-    .put("/effects", [light, server](AsyncWebServerRequest *request, JsonVariant &json) {
-      if (!json.containsKey(field_active)) {
-        return server->sendStatus(request, REQUEST_BAD);
-      }
-      bool is_success = light->setEffect(json[field_active]);
-      server->sendStatus(request, is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
-    })
+    // .put("/effects", [light, server](AsyncWebServerRequest *request, JsonVariant &json) {
+    //   if (!json.containsKey(field_active)) {
+    //     return server->sendStatus(request, REQUEST_BAD);
+    //   }
+    //   bool is_success = light->setEffect(json[field_active]);
+    //   server->sendStatus(request, is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
+    // })
 
-    .put("/progress", [light, server](AsyncWebServerRequest *request, JsonVariant &json) {
-      if (!json.containsKey(field_color)) {
-        return server->sendStatus(request, REQUEST_BAD);
-      }
-      bool is_success = light->setProgressColor(
-        json[field_color][0],
-        json[field_color][1],
-        json[field_color][2]
-      );
-      server->sendStatus(request, is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
-    })
+    // .put("/progress", [light, server](AsyncWebServerRequest *request, JsonVariant &json) {
+    //   if (!json.containsKey(field_color)) {
+    //     return server->sendStatus(request, REQUEST_BAD);
+    //   }
+    //   bool is_success = light->setProgressColor(
+    //     json[field_color][0],
+    //     json[field_color][1],
+    //     json[field_color][2]
+    //   );
+    //   server->sendStatus(request, is_success ? REQUEST_SUCCESS : REQUEST_ERROR);
+    // })
 
     .put("/color", [server, light](AsyncWebServerRequest *request, JsonVariant &json) {
       if (!json.containsKey(field_brightness)
@@ -55,10 +56,10 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
       bool planned;
       if (json.containsKey(field_color)) {
         planned = light->setColor(
-          json["brightness"],
-          json["color"][0],
-          json["color"][1],
-          json["color"][2]
+          json[field_brightness],
+          json[field_color][0],
+          json[field_color][1],
+          json[field_color][2]
         );
       } else {
         planned = light->setTemperature(
@@ -73,7 +74,7 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
       if (!json.containsKey(field_enabled)) {
         return server->sendStatus(request, REQUEST_BAD);
       }
-      if (json[field_enabled] == light->enabled) {
+      if (json[field_enabled] == light->enabled()) {
         return server->sendStatus(request, REQUEST_SUCCESS);
       }
       bool is_success;
@@ -86,11 +87,8 @@ void registerLightstripHandlers(mServer *server, Lightstrip *light, FirmwareRead
     })
 
     .postRaw("/update-firmware", [server, light, reader](AsyncWebServerRequest *request) {
-      AsyncResponseStream *response = request->beginResponseStream("text/plain");
-      response->write(reader->size());
       light->updateFirmware(reader);
-      request->send(response);
-      // server->sendStatus(request, REQUEST_SUCCESS);
+      server->sendStatus(request, REQUEST_SUCCESS);
     }, [reader](AsyncWebServerRequest *request, uint8_t *data,
       size_t len,
       size_t index,

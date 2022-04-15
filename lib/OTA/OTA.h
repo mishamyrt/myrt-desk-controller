@@ -23,7 +23,10 @@ class OTAController {
     }
 
     void onStart() {
-      listener->onOTAStart();
+      if (listener != NULL) {
+        listener->onOTAStart();
+      }
+
     }
 
     void handle() {

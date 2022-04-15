@@ -1,44 +1,57 @@
 #include "Arduino.h"
 #include "WiFiClient.h"
 #include "ESP8266WiFi.h"
-#include <ESPAsyncWebServer.h>
+#include "ESPAsyncWebServer.h"
 
 #include "secrets.h"
 #include "pins.h"
 #include "Blink.h"
 #include "Bekant.h"
-#include "Lightstrip.h"
+// #include "Lightstrip.h"
 #include "AVRLord.h"
 #include "OTA.h"
 #include "mServer.h"
 #include "Illuminance.h"
 #include "handlers.h"
+#include "Loggr.h"
 
-// mServer
+#include "Dap.h"
+#include "Lightstrip.h"
+
+// Server
 AsyncWebServer AsyncServer(80);
+AsyncWebSocket ws("/events");
 mServer Server(&AsyncServer);
+
+// Async I/O devices
+Dap LightData(&Serial);
+AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
+Lightstrip Light(&LightData, &LightAVR);
+
 
 // I/O devices
 BekantHeight Height(PIN_OEM_UP, PIN_OEM_DOWN);
-AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
+// AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 FirmwareReader Reader = FirmwareReader();
-Lightstrip Light(&LightAVR);
+// Lightstrip Light(&LightAVR);
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
 bool up_pressed;
 bool down_pressed;
 
 void setup() {
+  Loggr.attach(&ws);
+  AsyncServer.addHandler(&ws);
   // Setup wifi connection
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   WiFi.setHostname("MyrtDesk");
   MDNS.begin("MyrtDesk");
   Serial.begin(57600);
   // Setup light controller
-  Light.initialize();
+  // Light.initialize();
   // TODO: Replace with progress
-  Light.setColor(10, 50, 0, 255);
-  Light.handle();
+  // Light.setColor(10, 50, 0, 255);
+  // Light.handle();
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
@@ -60,14 +73,17 @@ void setup() {
   registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
   blink(3);
-  Light.writePowerOff();
+  Light.connect();
+  // Light.writePowerOff();
 }
 
 void loop() {
   if (digitalRead(PIN_BUTTON_UP)) {
+    Loggr.print("Button down");
     up_pressed = true;
     Height.increase();
   } else if (up_pressed) {
+    Loggr.print("Button up");
     up_pressed = false;
     Height.stop();
   }
