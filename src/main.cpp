@@ -17,6 +17,7 @@
 
 #include "DapMaster.h"
 #include "Lightstrip.h"
+#include "./MagicHand/MagicHand.h"
 
 // Server
 AsyncWebServer AsyncServer(80);
@@ -31,6 +32,7 @@ Lightstrip Light(&LightData, &LightAVR);
 
 // I/O devices
 BekantHeight Height(PIN_OEM_UP, PIN_OEM_DOWN);
+MagicHand Hand(&Height);
 // AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 FirmwareReader Reader = FirmwareReader();
 // Lightstrip Light(&LightAVR);
@@ -63,9 +65,6 @@ void setup() {
   // Setup and disable LED
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  // Setup buttons for manual height adjustment
-  pinMode(PIN_BUTTON_UP, INPUT);
-  pinMode(PIN_BUTTON_DOWN, INPUT);
   // Setup request handlers and start server
   registerDescribeHandler(&Server);
   registerLightstripHandlers(&Server, &Light, &Reader);
@@ -78,24 +77,9 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(PIN_BUTTON_UP)) {
-    Loggr.print("Button down");
-    up_pressed = true;
-    Height.increase();
-  } else if (up_pressed) {
-    Loggr.print("Button up");
-    up_pressed = false;
-    Height.stop();
-  }
 
-  if (digitalRead(PIN_BUTTON_DOWN)) {
-    down_pressed = true;
-    Height.decrease();
-  } else if (down_pressed) {
-    down_pressed = false;
-    Height.stop();
-  }
   Height.handle();
   Light.handle();
   OTA.handle();
+  Hand.handle();
 }
