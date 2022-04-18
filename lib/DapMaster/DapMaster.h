@@ -7,8 +7,8 @@
 #include "include/FIFO.h"
 
 #define DAP_BUFFER_SIZE 16
-#define DAP_INTERVAL 300
-#define DAP_STACK_SIZE 8
+#define DAP_INTERVAL 200
+#define DAP_STACK_SIZE 16
 #define DAP_TIMEOUT 2000
 
 class DapMaster {

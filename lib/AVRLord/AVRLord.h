@@ -22,6 +22,9 @@ class AVRLord {
     }
 
     void flash(FirmwareReader *reader) {
+      Serial.flush();
+      Serial.end();
+      Serial.begin(57600);
       this->reader = reader;
       address = 0;
       data_idx = 0;

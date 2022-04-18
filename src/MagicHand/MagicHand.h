@@ -13,7 +13,7 @@ enum {
   kStateFixed,
   kStateUp,
   kStateDown,
-} MagicHandState;
+};
 
 class MagicHand {
   public:

@@ -1,16 +1,22 @@
 #include "mServer.h"
-#include "Loggr.h"
 
-void registerDescribeHandler(mServer *server) {
+const char *template_system_state PROGMEM = \
+  "{\"mac\":\"%s\",\"rssi\":%d,\"id\":\"%s\",\"free_heap\":%d}";
+
+const String chip_id = String(ESP.getChipId(), HEX);
+
+void registerDescribeHandler(mServer *server, String mac_address) {
   server->addRoute("/describe")
-    .get([](AsyncWebServerRequest *request) {
-      AsyncJsonResponse * response = new AsyncJsonResponse();
-      JsonVariant& json = response->getRoot();
-      json["mac"] = WiFi.macAddress();
-      json["rssi"] = WiFi.RSSI();
-      json["id"] = String(ESP.getChipId(), HEX);
-      json["free_heap"] = ESP.getFreeHeap();
-      response->setLength();
+    .get([mac_address](AsyncWebServerRequest *request) {
+      AsyncResponseStream *response = request->beginResponseStream(JSON_MIMETYPE);
+      response->printf(
+        template_system_state,
+        mac_address,
+        WiFi.RSSI(),
+        chip_id,
+        ESP.getFreeHeap()
+      );
+      response->setCode(200);
       request->send(response);
     });
 }

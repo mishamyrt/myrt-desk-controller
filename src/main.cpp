@@ -12,7 +12,7 @@
 #include "OTA.h"
 #include "mServer.h"
 #include "Illuminance.h"
-#include "handlers.h"
+#include "handlers/register.h"
 #include "Loggr.h"
 
 #include "DapMaster.h"
@@ -29,13 +29,10 @@ DapMaster LightData(&Serial);
 AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 Lightstrip Light(&LightData, &LightAVR);
 
-
 // I/O devices
 BekantHeight Height(PIN_OEM_UP, PIN_OEM_DOWN);
 MagicHand Hand(&Height);
-// AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 FirmwareReader Reader = FirmwareReader();
-// Lightstrip Light(&LightAVR);
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
 bool up_pressed;
@@ -48,9 +45,9 @@ void setup() {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   WiFi.setHostname("MyrtDesk");
   MDNS.begin("MyrtDesk");
-  Serial.begin(57600);
+  Serial.begin(115200);
   // Setup light controller
-  // Light.initialize();
+  Light.connect();
   // TODO: Replace with progress
   // Light.setColor(10, 50, 0, 255);
   // Light.handle();
@@ -66,18 +63,16 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
   // Setup request handlers and start server
-  registerDescribeHandler(&Server);
+  registerDescribeHandler(&Server, WiFi.macAddress());
   registerLightstripHandlers(&Server, &Light, &Reader);
   registerLegsHandlers(&Server, &Height);
   registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
   blink(3);
-  Light.connect();
   // Light.writePowerOff();
 }
 
 void loop() {
-
   Height.handle();
   Light.handle();
   OTA.handle();

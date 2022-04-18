@@ -26,24 +26,23 @@ class mServer {
     }
 
     void sendStatus(AsyncWebServerRequest *request, RequestStatus status) {
-      DynamicJsonDocument doc(64);
       AsyncResponseStream *response = request->beginResponseStream(JSON_MIMETYPE);
+      response->print("{\"description\":\"");
       switch (status) {
         case REQUEST_SUCCESS:
-          doc[field_description] = "Success";
+          response->print("Success");
           response->setCode(200);
           break;
         case REQUEST_BAD:
-          doc[field_description] = "Wrong data passed";
+          response->print("Wrong data passed");
           response->setCode(400);
           break;
         case REQUEST_ERROR:
-          doc[field_description] = "Internal error";
+          response->print("Internal error");
           response->setCode(500);
           break;
       }
-      response_length = serializeJson(doc, response_buffer);
-      response->write(response_buffer, response_length);
+      response->print("\"}");
       request->send(response);
     }
 

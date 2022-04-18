@@ -1,5 +1,6 @@
 #include "DapMaster.h"
 #include "DapRequest.h"
+#include <Loggr.h>
 #include "include/FIFO.h"
 #include "include/codes.h"
 
@@ -105,12 +106,14 @@ void DapMaster::_handleRequest(DapRequest *request) {
 /// Reads response from dap device
 void DapMaster::_readResponse(DapRequest *request) {
   if (millis() >= request->expiry) {
+    Loggr.print("Timeout");
     _onError();
     return;
   }
   if (_serial->available() < 4) {
     return;
   }
+  Loggr.print("Read");
   _serial->read();
   _serial->read();
   _serial->read();
@@ -129,6 +132,7 @@ void DapMaster::_readResponse(DapRequest *request) {
       break;
     case DAP_ERROR:
     case -1:
+      Loggr.print("Wrong response");
       _onError();
       break;
   }
@@ -140,6 +144,7 @@ void DapMaster::_sendMessage(DapRequest *request) {
   if (millis() < _next_request_time) {
     return;
   }
+  Loggr.print("Send");
   _serial->write(DAP_HEADER_FIRST);
   _serial->write(DAP_HEADER_SECOND);
   _serial->write(request->payload_length);
@@ -155,6 +160,7 @@ void DapMaster::_sendMessage(DapRequest *request) {
 
 /// Adds request to queue
 bool DapMaster::_addRequest(DapRequest *request) {
+  Loggr.print("Add request");
   return _requests.append(request);
 }
 

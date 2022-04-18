@@ -6,7 +6,7 @@
 #include "AVRLord.h"
 #include "FirmwareReader.h"
 #include "Loggr.h"
-#include "./include/constants.h"
+#include "constants.h"
 
 #define LIGHTSTRIP_CONNECT_ATTEMPTS 3
 
@@ -40,6 +40,9 @@ class Lightstrip : public DapController {
     bool enabled() {
       return _enabled;
     }
+    uint8_t effect() {
+      return _effect;
+    }
 
     // DapController hooks
     void onError();
@@ -50,10 +53,14 @@ class Lightstrip : public DapController {
     void updateFirmware(FirmwareReader *reader);
 
     // State setter
-    bool setColor(uint8_t brightness, uint8_t r, uint8_t g, uint8_t b);
-    bool setTemperature(uint8_t brightness, uint8_t temperature);
+    bool setColor(uint8_t r, uint8_t g, uint8_t b);
+    bool setBrightness(uint8_t brightness);
+    bool setTemperature(uint8_t temperature);
+    bool setTransition(uint16_t transition);
+    bool setEffect(uint8_t effect_code);
     bool powerOn();
     bool powerOff();
+
 
   private:
     // Internal variables
@@ -69,6 +76,9 @@ class Lightstrip : public DapController {
     RGB _color = RGB{0, 0, 0};
     uint8_t _temperature = 0;
     uint8_t _brightness = 0;
+    uint16_t _transition = 500;
+    uint8_t _effect = 0;
+
     bool _enabled = false;
     FirmwareReader *_firmware = NULL;
 
