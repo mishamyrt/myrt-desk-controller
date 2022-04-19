@@ -6,17 +6,17 @@ info:
 servers:
   - url: http://MyrtDesk.local
 tags:
-  - name: lightstrip
+  - name: backlight
     description: Управление светодионой лентой
   - name: legs
     description: Управление ножками стола
   - name: sensors
     description: Получение данных с сенсоров
 paths:
-  /lightstrip:
+  /backlight:
     get:
       tags:
-      - lightstrip
+      - backlight
       summary: Получить состояние ленты
       responses:
         200:
@@ -25,10 +25,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LightstripState'
-  /lightstrip/color:
+  /backlight/color:
     put:
       tags:
-      - lightstrip
+      - backlight
       summary: Задать цвет ленты
       requestBody:
         description: Яркость тоже задаётся здесь, так как является множителем цвета.
@@ -56,10 +56,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActionStatus'
-  /lightstrip/effects:
+  /backlight/effects:
     put:
       tags:
-      - lightstrip
+      - backlight
       summary: Задать активный эффект
       requestBody:
         required: true
@@ -86,10 +86,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActionStatus'
-  /lightstrip/power:
+  /backlight/power:
     put:
       tags:
-      - lightstrip
+      - backlight
       summary: Задать состояние питания ленты
       requestBody:
         description: Яркость тоже задаётся здесь, так как является множителем цвета.

@@ -3,20 +3,19 @@
 #include "ESP8266WiFi.h"
 #include "ESPAsyncWebServer.h"
 
-#include "secrets.h"
-#include "pins.h"
-#include "Blink.h"
-#include "Bekant.h"
-// #include "Lightstrip.h"
-#include "AVRLord.h"
-#include "OTA.h"
-#include "mServer.h"
-#include "Illuminance.h"
-#include "handlers/register.h"
-#include "Loggr.h"
+#include <secrets.h>
+#include <pins.h>
+#include <Blink.h>
+#include <Bekant.h>
+#include <AVRLord.h>
+#include <OTA.h>
+#include <mServer.h>
+#include <Illuminance.h>
+#include <Loggr.h>
 
-#include "DapMaster.h"
-#include "Lightstrip.h"
+#include <DapMaster.h>
+#include <Backlight.h>
+#include "handlers/register.h"
 #include "./MagicHand/MagicHand.h"
 
 // Server
@@ -27,7 +26,7 @@ mServer Server(&AsyncServer);
 // Async I/O devices
 DapMaster LightData(&Serial);
 AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
-Lightstrip Light(&LightData, &LightAVR);
+Backlight Light(&LightData, &LightAVR);
 
 // I/O devices
 BekantHeight Height(PIN_OEM_UP, PIN_OEM_DOWN);

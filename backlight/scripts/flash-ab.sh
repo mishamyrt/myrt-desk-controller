@@ -1,7 +1,7 @@
 #!/bin/bash
 DEVICE_ADDRESS="$1"
 DESCRIBE_CMD="curl --connect-timeout 1 --output /dev/null --silent --fail $DEVICE_ADDRESS/describe"
-UPDATE_API="$DEVICE_ADDRESS/lightstrip/update-firmware"
+UPDATE_API="$DEVICE_ADDRESS/backlight/update-firmware"
 FIRMWARE_PATH="$2"
 
 wait_for_boot() {

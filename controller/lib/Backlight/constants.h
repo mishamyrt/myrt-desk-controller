@@ -6,7 +6,7 @@ typedef enum {
   COMMAND_SET_WHITE_TEMPERATURE = 3,
   COMMAND_SET_TRANSITION = 4,
   COMMAND_SET_EFFECT = 5
-} LightstripCommand;
+} BacklightCommand;
 
 typedef enum {
   MODE_RGB = 0,

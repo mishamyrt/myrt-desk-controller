@@ -16,7 +16,7 @@ struct RGB {
   uint8_t b = 0;
 };
 
-struct LightstripState {
+struct BacklightState {
   ColorMode mode;
   RGB color;
   uint8_t temperature;
@@ -25,9 +25,9 @@ struct LightstripState {
   uint8_t effect;
 };
 
-class Lightstrip : public DapController {
+class Backlight : public DapController {
   public:
-    Lightstrip(DapMaster *connection, AVRLord *board) {
+    Backlight(DapMaster *connection, AVRLord *board) {
       _data = connection;
       _data->setController(this);
       _board = board;
@@ -80,7 +80,7 @@ class Lightstrip : public DapController {
     DapMaster *_data;
     AVRLord *_board;
 
-    LightstripState _state;
+    BacklightState _state;
 
     bool _enabled = false;
     FirmwareReader *_firmware = NULL;
