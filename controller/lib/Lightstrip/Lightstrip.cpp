@@ -40,30 +40,30 @@ void Lightstrip::connect() {
 }
 
 bool Lightstrip::setColor(uint8_t r, uint8_t g, uint8_t b) {
-  _color.r = r;
-  _color.g = g;
-  _color.b = b;
-  _mode = MODE_RGB;
+  _state.color.r = r;
+  _state.color.g = g;
+  _state.color.b = b;
+  _state.mode = MODE_RGB;
   _enabled = true;
   return _data->send(COMMAND_SET_COLOR, r, g, b);
 }
 
 bool Lightstrip::setBrightness(uint8_t brightness) {
-  _brightness = brightness;
+  _state.brightness = brightness;
   return _data->send(COMMAND_SET_BRIGHTNESS, brightness);
 }
 
 bool Lightstrip::setTemperature(uint8_t temperature) {
-  _temperature = temperature;
-  _mode = MODE_TEMPERATURE;
+  _state.temperature = temperature;
+  _state.mode = MODE_TEMPERATURE;
   _enabled = true;
   return _data->send(COMMAND_SET_WHITE_TEMPERATURE, temperature);
 }
 
 bool Lightstrip::powerOn() {
   _enabled = true;
-  return _data->send(COMMAND_SET_BRIGHTNESS, _brightness)
-    && _data->send(COMMAND_SET_COLOR, _color.r, _color.g, _color.b);
+  return _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness)
+    && _data->send(COMMAND_SET_COLOR, _state.color.r, _state.color.g, _state.color.b);
 }
 
 bool Lightstrip::powerOff() {
@@ -77,8 +77,8 @@ bool Lightstrip::setTransition(uint16_t transition) {
 }
 
 bool Lightstrip::setEffect(uint8_t effect_code) {
-  _effect = effect_code;
-  return _data->send(COMMAND_SET_EFFECT, _effect);
+  _state.effect = effect_code;
+  return _data->send(COMMAND_SET_EFFECT, _state.effect);
 }
 
 void Lightstrip::_tryConnect() {

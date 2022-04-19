@@ -10,10 +10,19 @@
 
 #define LIGHTSTRIP_CONNECT_ATTEMPTS 3
 
-struct RGB{
+struct RGB {
   uint8_t r = 0;
   uint8_t g = 0;
   uint8_t b = 0;
+};
+
+struct LightstripState {
+  ColorMode mode;
+  RGB color;
+  uint8_t temperature;
+  uint8_t brightness;
+  uint16_t transition;
+  uint8_t effect;
 };
 
 class Lightstrip : public DapController {
@@ -26,22 +35,22 @@ class Lightstrip : public DapController {
 
     // State getters
     ColorMode mode() {
-      return _mode;
+      return _state.mode;
     }
     RGB color() {
-      return _color;
+      return _state.color;
     }
     uint8_t temperature() {
-      return _temperature;
+      return _state.temperature;
     }
     uint8_t brightness() {
-      return _brightness;
+      return _state.brightness;
     }
     bool enabled() {
       return _enabled;
     }
     uint8_t effect() {
-      return _effect;
+      return _state.effect;
     }
 
     // DapController hooks
@@ -71,13 +80,7 @@ class Lightstrip : public DapController {
     DapMaster *_data;
     AVRLord *_board;
 
-    // Lightstrip state
-    ColorMode _mode = MODE_RGB;
-    RGB _color = RGB{0, 0, 0};
-    uint8_t _temperature = 0;
-    uint8_t _brightness = 0;
-    uint16_t _transition = 500;
-    uint8_t _effect = 0;
+    LightstripState _state;
 
     bool _enabled = false;
     FirmwareReader *_firmware = NULL;
