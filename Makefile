@@ -1,12 +1,24 @@
+BACKLIGHT_DIR = backlight
+CONTROLLER_DIR = controller
+
+all: compile
+
 .PHONY: compile
-
 compile:
-	pio run -e local
-flash:
-	pio run -e local -t upload
-ota:
-	pio run -e ota -t upload
-	echo "Finish"
+	$(MAKE) -C $(BACKLIGHT_DIR)
+	$(MAKE) -C $(CONTROLLER_DIR)
 
-rebuild-vscode-intellisense:
-	pio init --ide vscode
+.PHONY: clear
+clear:
+	$(MAKE) clear -C $(BACKLIGHT_DIR)
+	$(MAKE) clear -C $(CONTROLLER_DIR)
+
+.PHONY: ota
+ota:
+	$(MAKE) ota -C $(BACKLIGHT_DIR)
+	$(MAKE) ota -C $(CONTROLLER_DIR)
+
+.PHONY: configure
+configure:
+	$(MAKE) configure -C $(BACKLIGHT_DIR)
+	$(MAKE) configure -C $(CONTROLLER_DIR)
