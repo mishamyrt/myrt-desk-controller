@@ -9,7 +9,6 @@ typedef enum {
 } LightstripCommand;
 
 typedef enum {
-  MODE_RGB,
-  MODE_TEMPERATURE,
-  MODE_EFFECT
+  MODE_RGB = 0,
+  MODE_TEMPERATURE = 1
 } ColorMode;
