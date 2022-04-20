@@ -1,4 +1,5 @@
 #include "BacklightController.h"
+#include <commands.h>
 
 void BacklightController::handle() {
   if (_firmware != NULL) {

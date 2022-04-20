@@ -1,13 +1,7 @@
 #include <CommandServer.h>
 #include <Animator.h>
 #include <Effects.h>
-
-#define COMMAND_GET_SYNC 0xFF
-#define COMMAND_SET_COLOR 1
-#define COMMAND_SET_BRIGHTNESS 2
-#define COMMAND_SET_WHITE_TEMPERATURE 3
-#define COMMAND_SET_TRANSITION 4
-#define COMMAND_SET_EFFECT 5
+#include <commands.h>
 
 #define COMMAND_EFFECT_NONE 0
 #define COMMAND_EFFECT_RAINBOW 1
