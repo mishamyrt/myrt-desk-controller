@@ -58,8 +58,8 @@ uint8_t SonicMotion::_assumeState() {
       return STATE_HOLD;
     }
   }
-  if (state == STATE_UP && (_distance <= _motion_start_distance && _distance > _dead_zone_bottom)
-    ||state == STATE_DOWN && (_distance >= _motion_start_distance && _distance > _dead_zone_top)) {
+  if ((state == STATE_UP && (_distance <= _motion_start_distance && _distance > _dead_zone_bottom))
+    ||(state == STATE_DOWN && (_distance >= _motion_start_distance && _distance > _dead_zone_top))) {
     return STATE_HOLD;
   }
   if (_distance > _motion_start_distance + MOTION_MAX_HEIGHT || _distance == 0) {
