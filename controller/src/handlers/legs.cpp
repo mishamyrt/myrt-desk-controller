@@ -1,9 +1,9 @@
 #include "mServer.h"
-#include "Bekant.h"
+#include <Height.h>
 
 const char *field_height PROGMEM = "height";
 
-void registerLegsHandlers(mServer *server, BekantHeight *height) {
+void registerLegsHandlers(mServer *server, HeightController *height) {
   server->addRoute("/legs")
     .get([height](AsyncWebServerRequest *request) {
       AsyncJsonResponse * response = new AsyncJsonResponse();

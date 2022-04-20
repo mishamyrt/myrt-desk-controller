@@ -6,7 +6,6 @@
 #include <secrets.h>
 #include <pins.h>
 #include <Blink.h>
-#include <Bekant.h>
 #include <AVRLord.h>
 #include <OTA.h>
 #include <mServer.h>
@@ -16,7 +15,7 @@
 #include <DapMaster.h>
 #include <Backlight.h>
 #include "handlers/register.h"
-#include "./MagicHand/MagicHand.h"
+#include "Height/Height.h"
 
 // Server
 AsyncWebServer AsyncServer(80);
@@ -28,9 +27,6 @@ DapMaster LightData(&Serial);
 AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 Backlight Light(&LightData, &LightAVR);
 
-// I/O devices
-BekantHeight Height(PIN_OEM_UP, PIN_OEM_DOWN);
-MagicHand Hand(&Height);
 FirmwareReader Reader = FirmwareReader();
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
@@ -56,7 +52,7 @@ void setup() {
   // Light.setColor(30, 40, 255, 0);
   // Light.handle();
   // Setup height controllers;
-  Height.initialize();
+  // Height.initialize();
   OTA.initialize();
   // Setup and disable LED
   pinMode(LED_BUILTIN, OUTPUT);
@@ -72,8 +68,7 @@ void setup() {
 }
 
 void loop() {
+  OTA.handle();
   Height.handle();
   Light.handle();
-  OTA.handle();
-  Hand.handle();
 }
