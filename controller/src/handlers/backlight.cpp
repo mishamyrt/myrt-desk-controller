@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <Backlight.h>
 #include <mServer.h>
-#include <FirmwareReader.h>
 
 const char *field_brightness PROGMEM = "brightness";
 const char *field_enabled PROGMEM = "enabled";
@@ -13,7 +12,7 @@ const char *field_transition PROGMEM = "transition";
 const char *template_backlight_state PROGMEM = \
   "{\"effect\":%d,\"brightness\":%d,\"temperature\":%d,\"enabled\":%s,\"color\":[%d,%d,%d]}";
 
-void registerLightstripHandlers(mServer *server, Backlight *light, FirmwareReader *reader) {
+void registerLightstripHandlers(mServer *server, BacklightController *light, FirmwareReader *reader) {
   server->addRoute("/backlight")
     .get([light](AsyncWebServerRequest *request) {
       AsyncResponseStream *response = request->beginResponseStream(JSON_MIMETYPE);

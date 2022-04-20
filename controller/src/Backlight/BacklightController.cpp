@@ -1,6 +1,6 @@
-#include "Backlight.h"
+#include "BacklightController.h"
 
-void Backlight::handle() {
+void BacklightController::handle() {
   if (_firmware != NULL) {
     _board->flash(_firmware);
     _firmware->clear();
@@ -11,12 +11,12 @@ void Backlight::handle() {
   _data->handle();
 }
 
-void Backlight::updateFirmware(FirmwareReader *firmware) {
+void BacklightController::updateFirmware(FirmwareReader *firmware) {
   _firmware = firmware;
 }
 
 /// Handles Dap error
-void Backlight::onError() {
+void BacklightController::onError() {
   Loggr.print("Got dap error");
   if (_connected) {
     _connected = false;
@@ -28,18 +28,18 @@ void Backlight::onError() {
 }
 
 /// Handles Dap connection
-void Backlight::onConnect() {
+void BacklightController::onConnect() {
   _connect_attempts = 0;
   _connected = true;
   Loggr.print("Dap connected!");
 }
 
-void Backlight::connect() {
+void BacklightController::connect() {
   _connect_attempts = LIGHTSTRIP_CONNECT_ATTEMPTS;
   _tryConnect();
 }
 
-bool Backlight::setColor(uint8_t r, uint8_t g, uint8_t b) {
+bool BacklightController::setColor(uint8_t r, uint8_t g, uint8_t b) {
   _state.color.r = r;
   _state.color.g = g;
   _state.color.b = b;
@@ -48,40 +48,40 @@ bool Backlight::setColor(uint8_t r, uint8_t g, uint8_t b) {
   return _data->send(COMMAND_SET_COLOR, r, g, b);
 }
 
-bool Backlight::setBrightness(uint8_t brightness) {
+bool BacklightController::setBrightness(uint8_t brightness) {
   _state.brightness = brightness;
   return _data->send(COMMAND_SET_BRIGHTNESS, brightness);
 }
 
-bool Backlight::setTemperature(uint8_t temperature) {
+bool BacklightController::setTemperature(uint8_t temperature) {
   _state.temperature = temperature;
   _state.mode = MODE_TEMPERATURE;
   _enabled = true;
   return _data->send(COMMAND_SET_WHITE_TEMPERATURE, temperature);
 }
 
-bool Backlight::powerOn() {
+bool BacklightController::powerOn() {
   _enabled = true;
   return _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness)
     && _data->send(COMMAND_SET_COLOR, _state.color.r, _state.color.g, _state.color.b);
 }
 
-bool Backlight::powerOff() {
+bool BacklightController::powerOff() {
   _enabled = false;
   return _data->send(COMMAND_SET_BRIGHTNESS, 0)
     && _data->send(COMMAND_SET_COLOR, 0, 0, 0);
 }
 
-bool Backlight::setTransition(uint16_t transition) {
+bool BacklightController::setTransition(uint16_t transition) {
   return _data->send(COMMAND_SET_TRANSITION, highByte(transition), lowByte(transition));
 }
 
-bool Backlight::setEffect(uint8_t effect_code) {
+bool BacklightController::setEffect(uint8_t effect_code) {
   _state.effect = effect_code;
   return _data->send(COMMAND_SET_EFFECT, _state.effect);
 }
 
-void Backlight::_tryConnect() {
+void BacklightController::_tryConnect() {
   _board->reset();
   _data->connect();
 }

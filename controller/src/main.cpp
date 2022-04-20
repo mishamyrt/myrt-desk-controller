@@ -6,43 +6,36 @@
 #include <secrets.h>
 #include <pins.h>
 #include <Blink.h>
-#include <AVRLord.h>
 #include <OTA.h>
 #include <mServer.h>
 #include <Illuminance.h>
 #include <Loggr.h>
 
-#include <DapMaster.h>
+#include <Height.h>
 #include <Backlight.h>
+
 #include "handlers/register.h"
-#include "Height/Height.h"
+
 
 // Server
 AsyncWebServer AsyncServer(80);
 AsyncWebSocket ws("/events");
 mServer Server(&AsyncServer);
 
-// Async I/O devices
-DapMaster LightData(&Serial);
-AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
-Backlight Light(&LightData, &LightAVR);
-
-FirmwareReader Reader = FirmwareReader();
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
 bool up_pressed;
 bool down_pressed;
 
 void setup() {
+  // Early enable WS server
   Loggr.attach(&ws);
   AsyncServer.addHandler(&ws);
-  // Setup wifi connection
+
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  WiFi.setHostname("MyrtDesk");
-  MDNS.begin("MyrtDesk");
   Serial.begin(115200);
   // Setup light controller
-  Light.connect();
+  Backlight.connect();
   // TODO: Replace with progress
   // Light.setColor(10, 50, 0, 255);
   // Light.handle();
@@ -59,16 +52,15 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   // Setup request handlers and start server
   registerDescribeHandler(&Server, WiFi.macAddress());
-  registerLightstripHandlers(&Server, &Light, &Reader);
+  registerLightstripHandlers(&Server, &Backlight, &Reader);
   registerLegsHandlers(&Server, &Height);
   registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
   blink(3);
-  // Light.writePowerOff();
 }
 
 void loop() {
   OTA.handle();
   Height.handle();
-  Light.handle();
+  Backlight.handle();
 }

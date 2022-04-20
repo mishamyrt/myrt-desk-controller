@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Arduino.h"
-#include "DapMaster.h"
-#include "DapController.h"
-#include "AVRLord.h"
-#include "FirmwareReader.h"
-#include "Loggr.h"
+#include <Arduino.h>
+#include <Loggr.h>
+#include "lib/DapMaster/DapMaster.h"
+#include "lib/AVRLord/AVRLord.h"
 #include "constants.h"
 
 #define LIGHTSTRIP_CONNECT_ATTEMPTS 3
@@ -25,9 +23,9 @@ struct BacklightState {
   uint8_t effect;
 };
 
-class Backlight : public DapController {
+class BacklightController : public DapController {
   public:
-    Backlight(DapMaster *connection, AVRLord *board) {
+    BacklightController(DapMaster *connection, AVRLord *board) {
       _data = connection;
       _data->setController(this);
       _board = board;
