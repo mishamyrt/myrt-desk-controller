@@ -21,7 +21,7 @@ bool RainbowEffect::handle(EffectStateController *host, Strip *strip) {
   return true;
 }
 
-void RainbowEffect::prepare(EffectStateController *controller) {
+void RainbowEffect::prepare(EffectStateController *controller, Strip *strip) {
   _progress.setDuration(
     controller->transition_time() * 37
   );

@@ -22,7 +22,7 @@ void Effector::handle() {
 
 void Effector::applyEffect(Effect *effect) {
   _effect = effect;
-  _effect->prepare(this);
+  _effect->prepare(this, _leds);
   LEDS.show();
 }
 

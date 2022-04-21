@@ -22,7 +22,7 @@ class Effect {
     virtual bool handle(EffectStateController *controller, Strip *strip) = 0;
     virtual void finalize(EffectStateController *controller) = 0;
     virtual void onColorUpdate(EffectStateController *controller) = 0;
-    virtual void prepare(EffectStateController *controller) = 0;
+    virtual void prepare(EffectStateController *controller, Strip *strip) = 0;
 };
 
 class Effector : public EffectStateController {
@@ -45,7 +45,7 @@ class Effector : public EffectStateController {
     void onEffectFinished() override {
       _effect = _next_effect;
       _next_effect = NULL;
-      _effect->prepare(this);
+      _effect->prepare(this, _leds);
     }
 
     uint32_t transition_time() override {

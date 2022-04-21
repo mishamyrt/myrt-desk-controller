@@ -7,7 +7,7 @@ class RainbowEffect : public Effect {
     bool handle(EffectStateController *host, Strip *strip);
     void finalize(EffectStateController *controller);
     void onColorUpdate(EffectStateController *controller);
-    void prepare(EffectStateController *controller);
+    void prepare(EffectStateController *controller, Strip *strip);
 
   private:
     TimeProgress _progress = TimeProgress();

@@ -29,7 +29,7 @@ void FillEffect::onColorUpdate(EffectStateController *controller) {
   _transitioned = false;
 }
 
-void FillEffect::prepare(EffectStateController *controller) {
+void FillEffect::prepare(EffectStateController *controller, Strip *strip) {
   onColorUpdate(controller);
 }
 
