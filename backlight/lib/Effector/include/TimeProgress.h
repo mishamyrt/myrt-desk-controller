@@ -4,7 +4,11 @@
 
 class TimeProgress {
   public:
-    void setDuration(unsigned int duration) {
+    void setMaxProgress(size_t max_value) {
+      _max_value = max_value;
+    }
+
+    void setDuration(size_t duration) {
       _duration = duration;
       reset();
     }
@@ -15,23 +19,27 @@ class TimeProgress {
     }
 
     void tick() {
-      _value = constrain(map(
-        millis() - _start_time, // Map time delta
-        0, _duration,  // from range is 0 - _duration
-        0, UINT8_MAX // to uint8_t range (0 - 255)
-      ), 0, UINT8_MAX);
+      _value = constrain(
+        map(
+          millis() - _start_time,
+          0, _duration,
+          0, _max_value
+        ),
+        0, _max_value
+      );
     }
 
     bool is_done() {
-      return _value == 255;
+      return _value == _max_value;
     }
 
-    uint8_t value() {
+    size_t value() {
       return _value;
     }
 
   private:
     unsigned long _start_time = 0;
-    unsigned int _duration = 0;
-    uint8_t _value = 255;
+    size_t _duration = 0;
+    size_t _max_value = 255;
+    size_t _value;
 };
