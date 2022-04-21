@@ -5,6 +5,7 @@
 
 #define COMMAND_EFFECT_NONE 0
 #define COMMAND_EFFECT_RAINBOW 1
+#define COMMAND_EFFECT_PROGRESS 2
 
 bool handleSetColor(uint8_t *message, uint8_t length) {
   if (length < 4) {
@@ -55,6 +56,9 @@ bool handleSetEffect(uint8_t *message, uint8_t length) {
       break;
     case COMMAND_EFFECT_RAINBOW:
       Animator.setEffect(&Rainbow);
+      break;
+    case COMMAND_EFFECT_PROGRESS:
+      Animator.setEffect(&Progress);
       break;
     default:
       return false;
