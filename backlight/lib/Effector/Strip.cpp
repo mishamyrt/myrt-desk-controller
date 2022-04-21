@@ -6,7 +6,7 @@ void Strip::mirror() {
   }
 }
 
-inline void Strip::set(CRGB color, uint8_t idx) {
+void Strip::set(CRGB color, uint8_t idx) {
   leds[idx] = color;
 }
 
