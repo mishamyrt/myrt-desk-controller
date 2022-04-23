@@ -6,7 +6,7 @@
 
 /// Async connect to device. Response will be sent to *controller
 void DapMaster::connect() {
-  // Create fake request with sent state and increased timeout
+  // Creating fake request with sent state and increased timeout
   // It will cause status read on next step
   _started = false;
   DapRequest *status_request = new DapRequest{
@@ -113,7 +113,6 @@ void DapMaster::_readResponse(DapRequest *request) {
   if (_serial->available() < 4) {
     return;
   }
-  Loggr.print("Read");
   _serial->read();
   _serial->read();
   _serial->read();
@@ -144,7 +143,6 @@ void DapMaster::_sendMessage(DapRequest *request) {
   if (millis() < _next_request_time) {
     return;
   }
-  Loggr.print("Send");
   _serial->write(DAP_HEADER_FIRST);
   _serial->write(DAP_HEADER_SECOND);
   _serial->write(request->payload_length);
@@ -160,7 +158,6 @@ void DapMaster::_sendMessage(DapRequest *request) {
 
 /// Adds request to queue
 bool DapMaster::_addRequest(DapRequest *request) {
-  Loggr.print("Add request");
   return _requests.append(request);
 }
 
