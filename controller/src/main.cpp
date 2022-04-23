@@ -23,9 +23,6 @@ mServer Server(&AsyncServer);
 
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
-bool up_pressed;
-bool down_pressed;
-
 void setupServer() {
   Loggr.attach(&ws);
   AsyncServer.addHandler(&ws);
