@@ -15,12 +15,12 @@ struct RGB {
 };
 
 struct BacklightState {
-  ColorMode mode;
-  RGB color;
-  uint8_t temperature;
-  uint8_t brightness;
-  uint16_t transition;
-  uint8_t effect;
+  ColorMode mode = MODE_RGB;
+  RGB color = RGB{0, 0, 0};
+  uint8_t temperature = 0;
+  uint8_t brightness = 0;
+  uint16_t transition = 0;
+  uint8_t effect = 0;
 };
 
 class BacklightController : public DapController {
