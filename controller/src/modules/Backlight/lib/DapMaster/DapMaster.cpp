@@ -121,12 +121,12 @@ void DapMaster::_readResponse(DapRequest *request) {
   _next_request_time = millis() + DAP_INTERVAL;
   switch (data) {
     case DAP_SUCCESS:
+      if (!_connected) {
+        _connected = true;
+      }
       if (!_started) {
         _started = true;
         controller->onConnect();
-      }
-      if (!_connected) {
-        _connected = true;
       }
       break;
     case DAP_ERROR:
