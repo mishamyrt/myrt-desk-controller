@@ -45,7 +45,7 @@ bool BacklightController::setColor(uint8_t r, uint8_t g, uint8_t b) {
   _state.color.g = g;
   _state.color.b = b;
   _state.mode = MODE_RGB;
-  _enabled = true;
+  _state.enabled = true;
   return _data->send(COMMAND_SET_COLOR, r, g, b);
 }
 
@@ -57,18 +57,18 @@ bool BacklightController::setBrightness(uint8_t brightness) {
 bool BacklightController::setTemperature(uint8_t temperature) {
   _state.temperature = temperature;
   _state.mode = MODE_TEMPERATURE;
-  _enabled = true;
+  _state.enabled = true;
   return _data->send(COMMAND_SET_WHITE_TEMPERATURE, temperature);
 }
 
 bool BacklightController::powerOn() {
-  _enabled = true;
+  _state.enabled = true;
   return _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness)
     && _data->send(COMMAND_SET_COLOR, _state.color.r, _state.color.g, _state.color.b);
 }
 
 bool BacklightController::powerOff() {
-  _enabled = false;
+  _state.enabled = false;
   return _data->send(COMMAND_SET_BRIGHTNESS, 0)
     && _data->send(COMMAND_SET_COLOR, 0, 0, 0);
 }

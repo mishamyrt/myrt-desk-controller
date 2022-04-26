@@ -21,6 +21,7 @@ struct BacklightState {
   uint8_t brightness = 0;
   uint16_t transition = 0;
   uint8_t effect = 0;
+  bool enabled = false;
 };
 
 class BacklightController : public DapController {
@@ -45,7 +46,7 @@ class BacklightController : public DapController {
       return _state.brightness;
     }
     bool enabled() {
-      return _enabled;
+      return _state.enabled;
     }
     uint8_t effect() {
       return _state.effect;
@@ -80,7 +81,6 @@ class BacklightController : public DapController {
 
     BacklightState _state;
 
-    bool _enabled = false;
     FirmwareReader *_firmware = NULL;
 
     void _tryConnect();
