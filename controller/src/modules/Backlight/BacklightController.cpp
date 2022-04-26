@@ -33,6 +33,7 @@ void BacklightController::onConnect() {
   _connect_attempts = 0;
   _connected = true;
   Loggr.print("Dap connected!");
+  _applyState();
 }
 
 void BacklightController::connect() {
@@ -85,4 +86,16 @@ bool BacklightController::setEffect(uint8_t effect_code) {
 void BacklightController::_tryConnect() {
   _board->reset();
   _data->connect();
+}
+
+void BacklightController::_applyState() {
+  if (_state.enabled) {
+    _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness);
+  }
+  _data->send(COMMAND_SET_EFFECT, _state.effect);
+  if (_state.mode == MODE_RGB) {
+    _data->send(COMMAND_SET_COLOR, _state.color.r, _state.color.g, _state.color.b);
+  } else if (_state.mode == MODE_TEMPERATURE) {
+    _data->send(COMMAND_SET_WHITE_TEMPERATURE, _state.temperature);
+  }
 }

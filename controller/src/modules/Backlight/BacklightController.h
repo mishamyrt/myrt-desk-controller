@@ -84,4 +84,5 @@ class BacklightController : public DapController {
     FirmwareReader *_firmware = NULL;
 
     void _tryConnect();
+    void _applyState();
 };
