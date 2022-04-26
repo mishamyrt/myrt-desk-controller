@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <Loggr.h>
+#include <Store.h>
 #include "lib/DapMaster/DapMaster.h"
 #include "lib/AVRLord/AVRLord.h"
 #include "constants.h"
@@ -26,11 +27,7 @@ struct BacklightState {
 
 class BacklightController : public DapController {
   public:
-    BacklightController(DapMaster *connection, AVRLord *board) {
-      _data = connection;
-      _data->setController(this);
-      _board = board;
-    }
+    BacklightController(DapMaster *connection, AVRLord *board);
 
     // State getters
     ColorMode mode() {
@@ -80,6 +77,7 @@ class BacklightController : public DapController {
     AVRLord *_board;
 
     BacklightState _state;
+    Stored _descriptor = Stored(_state);
 
     FirmwareReader *_firmware = NULL;
 
