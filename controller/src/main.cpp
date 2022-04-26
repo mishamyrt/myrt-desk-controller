@@ -10,6 +10,7 @@
 #include <mServer.h>
 #include <Illuminance.h>
 #include <Loggr.h>
+#include <Store.h>
 
 #include <Height.h>
 #include <Backlight.h>
@@ -51,4 +52,5 @@ void loop() {
   OTA.handle();
   Height.handle();
   Backlight.handle();
+  Store.handle();
 }
