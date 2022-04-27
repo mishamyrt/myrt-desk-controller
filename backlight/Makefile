@@ -24,4 +24,7 @@ configure:
 
 .PHONY: lint
 lint:
-	cpplint --filter=-whitespace/parens,-readability/todo,-build/include_subdir --recursive src/ lib/ include/
+	cpplint \
+		--filter=-whitespace/parens,-readability/todo,-build/include_subdir \
+		--recursive \
+		src/ lib/ include/
