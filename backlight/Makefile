@@ -27,4 +27,5 @@ lint:
 	cpplint \
 		--filter=-whitespace/parens,-readability/todo,-build/include_subdir \
 		--recursive \
+		--linelength 100 \
 		src/ lib/ include/
