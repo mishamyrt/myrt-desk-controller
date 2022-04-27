@@ -131,7 +131,9 @@ void DapMaster::_readResponse(DapRequest *request) {
       break;
     case DAP_ERROR:
     case -1:
-      Loggr.print("Wrong response");
+      Loggr.message = "Wrong response: ";
+      Loggr.message += data;
+      Loggr.flush();
       _onError();
       break;
   }
