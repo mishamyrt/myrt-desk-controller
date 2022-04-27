@@ -22,3 +22,6 @@ clear:
 configure:
 	pio init --ide vscode
 
+.PHONY: lint
+lint:
+	cpplint --filter=-whitespace/parens --recursive src/ lib/ include/
