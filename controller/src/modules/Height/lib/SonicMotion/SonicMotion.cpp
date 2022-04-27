@@ -80,7 +80,8 @@ bool SonicMotion::_update() {
     return false;
   }
   _ping_debounce.set(SONIC_PING_INTERVAL);
-  _distance = _sonar->ping_median(8) / US_ROUNDTRIP_CM;
+  // TODO: This method is very unstable. Should be replaced with async median
+  _distance = _sonar->ping() / US_ROUNDTRIP_CM;
   return true;
 }
 

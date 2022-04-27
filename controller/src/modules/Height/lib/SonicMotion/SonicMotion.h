@@ -5,8 +5,7 @@
 #include "Listener.h"
 #include "lib/Proven.h"
 
-// Should be more than 50
-#define SONIC_PING_INTERVAL 20
+#define SONIC_PING_INTERVAL 30
 #define MOTION_ACTION_PROOFS 4
 // Trigger zone
 #define MOTION_MAX_HEIGHT 50
