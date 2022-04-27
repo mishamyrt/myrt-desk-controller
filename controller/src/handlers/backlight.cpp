@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include <Arduino.h>
 #include <Backlight.h>
 #include <mServer.h>
@@ -12,7 +17,11 @@ const char *field_transition PROGMEM = "transition";
 const char *template_backlight_state PROGMEM = \
   "{\"effect\":%d,\"brightness\":%d,\"temperature\":%d,\"enabled\":%s,\"color\":[%d,%d,%d]}";
 
-void registerLightstripHandlers(mServer *server, BacklightController *light, FirmwareReader *reader) {
+void registerLightstripHandlers(
+  mServer *server,
+  BacklightController *light,
+  FirmwareReader *reader
+) {
   server->addRoute("/backlight")
     .get([light](AsyncWebServerRequest *request) {
       AsyncResponseStream *response = request->beginResponseStream(JSON_MIMETYPE);
@@ -93,7 +102,7 @@ void registerLightstripHandlers(mServer *server, BacklightController *light, Fir
       size_t index,
       size_t total
     ) {
-      if(!index){
+      if(!index) {
         reader->create(total);
       }
       reader->appendChunk(data, len, index);

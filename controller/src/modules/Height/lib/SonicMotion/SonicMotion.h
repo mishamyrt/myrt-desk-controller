@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #pragma once
 
 #include <NewPing.h>
@@ -20,25 +25,25 @@ enum {
 };
 
 class SonicMotion {
-  public:
-    SonicMotion(uint8_t trigger, uint8_t echo);
-    void handle();
-    bool disable();
-    void enable();
-    void setListener(MotionListener *listener);
-    size_t measureDistance();
+ public:
+  SonicMotion(uint8_t trigger, uint8_t echo);
+  void handle();
+  bool disable();
+  void enable();
+  void setListener(MotionListener *listener);
+  size_t measureDistance();
 
-  private:
-    bool _enabled = false;
-    size_t _distance;
-    size_t _motion_start_distance;
-    size_t _dead_zone_top;
-    size_t _dead_zone_bottom;
-    Proven<uint8_t> _state = Proven<uint8_t>(STATE_FREE);
-    MotionListener *_listener;
-    NewPing *_sonar;
-    Timer _ping_debounce;
+ private:
+  bool _enabled = false;
+  size_t _distance;
+  size_t _motion_start_distance;
+  size_t _dead_zone_top;
+  size_t _dead_zone_bottom;
+  Proven<uint8_t> _state = Proven<uint8_t>(STATE_FREE);
+  MotionListener *_listener;
+  NewPing *_sonar;
+  Timer _ping_debounce;
 
-    bool _update();
-    uint8_t _assumeState();
+  bool _update();
+  uint8_t _assumeState();
 };

@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "DapMaster.h"
 #include "DapRequest.h"
 #include <Loggr.h>
@@ -56,7 +61,12 @@ bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second) {
   return send(message, 3);
 }
 
-bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third) {
+bool DapMaster::send(
+  uint8_t command,
+  uint8_t first,
+  uint8_t second,
+  uint8_t third
+) {
   uint8_t *message = new uint8_t[4];
   message[0] = command;
   message[1] = first;
@@ -65,7 +75,13 @@ bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t thi
   return send(message, 4);
 }
 
-bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, uint8_t fourth) {
+bool DapMaster::send(
+  uint8_t command,
+  uint8_t first,
+  uint8_t second,
+  uint8_t third,
+  uint8_t fourth
+) {
   uint8_t *message = new uint8_t[5];
   message[0] = command;
   message[1] = first;
@@ -75,7 +91,14 @@ bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t thi
   return send(message, 5);
 }
 
-bool DapMaster::send(uint8_t command, uint8_t first, uint8_t second, uint8_t third, uint8_t fourth, uint8_t fifth) {
+bool DapMaster::send(
+  uint8_t command,
+  uint8_t first,
+  uint8_t second,
+  uint8_t third,
+  uint8_t fourth,
+  uint8_t fifth
+) {
   uint8_t *message = new uint8_t[6];
   message[0] = command;
   message[1] = first;

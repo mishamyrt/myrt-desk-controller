@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "HeightController.h"
 
 HeightController::HeightController(Bekant *motor, SonicMotion *motion) {
@@ -28,8 +33,10 @@ bool HeightController::set(size_t height) {
 void HeightController::handle() {
   if (_moving_to_target) {
     _updateHeight();
-    if ((_motor->getState() == STATE_MOVE_UP && _state.height >= _target_height)
-      || (_motor->getState() == STATE_MOVE_DOWN && _state.height <= _target_height)) {
+    if ((_motor->getState() == STATE_MOVE_UP
+      && _state.height >= _target_height)
+      || (_motor->getState() == STATE_MOVE_DOWN
+      && _state.height <= _target_height)) {
       _motor->stop();
       _moving_to_target = false;
       _motion->enable();
@@ -41,7 +48,7 @@ void HeightController::handle() {
     _updateHeight();
   }
   _motion->handle();
-};
+}
 
 void HeightController::onUpMotion() {
   _motor->moveUp();

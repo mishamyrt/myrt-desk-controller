@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "SonicMotion.h"
 
 SonicMotion::SonicMotion(uint8_t trigger, uint8_t echo) {
@@ -58,11 +63,16 @@ uint8_t SonicMotion::_assumeState() {
       return STATE_HOLD;
     }
   }
-  if ((state == STATE_UP && (_distance <= _motion_start_distance && _distance > _dead_zone_bottom))
-    ||(state == STATE_DOWN && (_distance >= _motion_start_distance && _distance > _dead_zone_top))) {
+  if ((state == STATE_UP
+      && (_distance <= _motion_start_distance
+        && _distance > _dead_zone_bottom))
+    ||(state == STATE_DOWN
+      && (_distance >= _motion_start_distance
+        && _distance > _dead_zone_top))) {
     return STATE_HOLD;
   }
-  if (_distance > _motion_start_distance + MOTION_MAX_HEIGHT || _distance == 0) {
+  if (_distance > _motion_start_distance + MOTION_MAX_HEIGHT
+    || _distance == 0) {
     return STATE_FREE;
   }
 

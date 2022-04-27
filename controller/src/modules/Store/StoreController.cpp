@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "StoreController.h"
 
 StoreController::StoreController() {
@@ -34,7 +39,8 @@ void StoreController::write(Stored *value) {
 }
 
 bool StoreController::append(Stored *value) {
-  if (_count == STORE_COUNT - 1 || (size_t)(_next_addr + value->size + 1) > EEPROM.length()) {
+  if (_count == STORE_COUNT - 1
+    || static_cast<size_t>(_next_addr + value->size + 1) > EEPROM.length()) {
     return false;
   }
   value->addr = _next_addr;

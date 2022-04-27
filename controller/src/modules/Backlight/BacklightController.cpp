@@ -1,7 +1,15 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "BacklightController.h"
 #include <commands.h>
 
-BacklightController::BacklightController(DapMaster *connection, AVRLord *board) {
+BacklightController::BacklightController(
+  DapMaster *connection,
+  AVRLord *board
+) {
   _data = connection;
   _data->setController(this);
   _board = board;
@@ -76,7 +84,12 @@ bool BacklightController::powerOn() {
   _state.enabled = true;
   _descriptor.update();
   return _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness)
-    && _data->send(COMMAND_SET_COLOR, _state.color.r, _state.color.g, _state.color.b);
+    && _data->send(
+      COMMAND_SET_COLOR,
+      _state.color.r,
+      _state.color.g,
+      _state.color.b
+    );
 }
 
 bool BacklightController::powerOff() {
@@ -87,7 +100,11 @@ bool BacklightController::powerOff() {
 }
 
 bool BacklightController::setTransition(uint16_t transition) {
-  return _data->send(COMMAND_SET_TRANSITION, highByte(transition), lowByte(transition));
+  return _data->send(
+    COMMAND_SET_TRANSITION,
+    highByte(transition),
+    lowByte(transition)
+  );
 }
 
 bool BacklightController::setEffect(uint8_t effect_code) {
@@ -107,7 +124,12 @@ void BacklightController::_applyState() {
   }
   _data->send(COMMAND_SET_EFFECT, _state.effect);
   if (_state.mode == MODE_RGB) {
-    _data->send(COMMAND_SET_COLOR, _state.color.r, _state.color.g, _state.color.b);
+    _data->send(
+      COMMAND_SET_COLOR,
+      _state.color.r,
+      _state.color.g,
+      _state.color.b
+    );
   } else if (_state.mode == MODE_TEMPERATURE) {
     _data->send(COMMAND_SET_WHITE_TEMPERATURE, _state.temperature);
   }
