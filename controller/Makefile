@@ -15,3 +15,10 @@ ota:
 .PHONY: configure
 configure:
 	pio init --ide vscode
+
+.PHONY: lint
+lint:
+	cpplint \
+		--filter=-whitespace/parens,-readability/todo,-build/include_subdir \
+		--recursive \
+		src/ lib/ include/
