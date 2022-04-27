@@ -10,7 +10,7 @@ void DapSlave::handle() {
   if (_serial->available() < 4) {
     return;
   }
-  delay(20);
+  delay(10);
   if (!_readMessage()) {
     _sendError();
     return;
