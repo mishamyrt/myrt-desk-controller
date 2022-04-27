@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "DapSlave.h"
 #include <Arduino.h>
 
@@ -15,7 +20,8 @@ void DapSlave::handle() {
     _sendError();
     return;
   }
-  if (_handler != NULL && _handler->handleMessage(_input_buffer, _input_length)) {
+  if (_handler != NULL
+    && _handler->handleMessage(_input_buffer, _input_length)) {
     _sendSuccess();
   } else {
     _sendError();
@@ -31,10 +37,10 @@ void DapSlave::_sendSuccess() {
 }
 
 void DapSlave::_sendCode(uint8_t code) {
-  _serial->write(HEADER_FIRST); // Header
+  _serial->write(HEADER_FIRST);  // Header
   _serial->write(HEADER_SECOND);
-  _serial->write(1); // Length
-  _serial->write(code); // Payload
+  _serial->write(1);  // Length
+  _serial->write(code);  // Payload
 }
 
 bool DapSlave::_readMessage() {

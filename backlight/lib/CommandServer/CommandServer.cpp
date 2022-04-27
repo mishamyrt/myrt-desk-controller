@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "CommandServer.h"
 
 void CommandServer::begin(Stream *serial) {
@@ -5,7 +10,10 @@ void CommandServer::begin(Stream *serial) {
   _data.connect(serial);
 }
 
-CommandServer& CommandServer::on(uint8_t code, bool (*handler)(uint8_t *message, uint8_t length)) {
+CommandServer& CommandServer::on(
+  uint8_t code,
+  bool (*handler)(uint8_t *message, uint8_t length)
+) {
   _handlers[_handlers_count].code = code;
   _handlers[_handlers_count].handle = handler;
   _handlers_count++;

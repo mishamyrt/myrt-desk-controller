@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "Progress.h"
 
 enum {
@@ -63,8 +68,8 @@ void ProgressEffect::_drawIntro(Strip *strip) {
   }
 }
 
- void ProgressEffect::_drawOutro(EffectStateController *host, Strip *strip) {
-   // Blend background from black color to current color
+void ProgressEffect::_drawOutro(EffectStateController *host, Strip *strip) {
+  // Blend background from black color to current color
   _background_color = blend_colors(
     CRGB::Black,
     _highlight_color,
@@ -80,7 +85,10 @@ void ProgressEffect::_drawProgress(Strip *strip) {
   _drawGlow(strip);
 }
 
-void ProgressEffect::_drawColorChange(EffectStateController *host, Strip *strip) {
+void ProgressEffect::_drawColorChange(
+  EffectStateController *host,
+  Strip *strip
+) {
   _highlight_color = blend_colors(
     host->color(),
     host->target_color(),

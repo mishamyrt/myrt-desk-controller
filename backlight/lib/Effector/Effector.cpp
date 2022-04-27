@@ -1,10 +1,15 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #include "Effector.h"
 
 void Effector::handle() {
   if (_effect == NULL) {
     return;
   }
-  unsigned long now = millis();
+  uint64_t now = millis();
   if (now < _next_render) {
     return;
   }

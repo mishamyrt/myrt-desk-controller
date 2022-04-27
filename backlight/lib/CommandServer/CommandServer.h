@@ -1,3 +1,8 @@
+// Copyright 2022, Mikhael Khrustik <misha@myrt.co>
+//
+// All components of Myrt Desk Firmware are licensed under the BSD 3-Clause
+// License. See LICENSE.txt for details.
+
 #pragma once
 
 #include <stdint.h>
@@ -11,14 +16,17 @@ struct CommandHandler {
 
 // Command wrapper around Dap slave
 class CommandServer : public DapHandler {
-  public:
-    void begin(Stream *serial);
-    void handle();
-    bool handleMessage(uint8_t *message, uint8_t length);
-    CommandServer& on(uint8_t code, bool (*handler)(uint8_t *message, uint8_t length));
+ public:
+  void begin(Stream *serial);
+  void handle();
+  bool handleMessage(uint8_t *message, uint8_t length);
+  CommandServer& on(
+    uint8_t code,
+    bool (*handler)(uint8_t *message, uint8_t length)
+  );
 
-  private:
-    CommandHandler _handlers[32];
-    uint8_t _handlers_count = 0;
-    DapSlave _data = DapSlave();
+ private:
+  CommandHandler _handlers[32];
+  uint8_t _handlers_count = 0;
+  DapSlave _data = DapSlave();
 };
