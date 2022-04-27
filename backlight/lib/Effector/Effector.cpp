@@ -15,7 +15,7 @@ void Effector::handle() {
   }
   should_update |= _effect->handle(this, _leds);
   if (should_update) {
-     LEDS.show();
+    LEDS.show();
     _next_render = now + 30;
   }
 }
