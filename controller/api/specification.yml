@@ -257,20 +257,24 @@ components:
       properties:
         brightness:
           type: integer
-          format: int32
           minimum: 0
           maximum: 255
         color:
           type: array
           items:
             type: integer
-            format: int32
             minimum: 0
             maximum: 255
           minItems: 3
           maxItems: 3
         enabled:
           type: boolean
+        temperature:
+          type: integer
+          minimum: 0
+          maximum: 255
+        effect:
+          type: integer
     ActionStatus:
       type: object
       properties:
