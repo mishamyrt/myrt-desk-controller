@@ -17,5 +17,5 @@ struct DapRequest {
   uint8_t state = D_CREATED;
   uint8_t *payload;
   uint8_t payload_length;
-  uint64_t expiry = millis();
+  uint64_t expiry = 0;
 };
