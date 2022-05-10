@@ -10,6 +10,10 @@ class Loggr_ {
  public:
   String message;
 
+  void start() {
+    _started = true;
+  }
+
   void attach(AsyncWebSocket *stream) {
     _stream = stream;
   }
@@ -25,9 +29,12 @@ class Loggr_ {
 
  private:
   AsyncWebSocket *_stream;
+  bool _started = false;
 
   void _send(String content) {
-    _stream->textAll(("log: " + content).c_str());
+    if (_started) {
+      _stream->textAll(("log: " + content).c_str());
+    }
   }
 };
 

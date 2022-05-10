@@ -37,6 +37,7 @@ void setupServer() {
   registerLegsHandlers(&Server, &Height);
   registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
+  Loggr.start();
 }
 
 void setup() {
