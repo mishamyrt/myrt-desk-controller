@@ -19,12 +19,12 @@ void SonicMotion::handle() {
   }
   switch (_assumeState()) {
     case STATE_FREE:
-      if (_state.set(STATE_FREE, 2)) {
+      if (_state.set(STATE_FREE, 4)) {
         _listener->onMotionEnd(_distance);
       }
       break;
     case STATE_HOLD:
-      if (_state.set(STATE_HOLD, 2)) {
+      if (_state.set(STATE_HOLD, 4)) {
         // Save values for next calculations
         _motion_start_distance = _distance;
         _dead_zone_top = _distance + MOTION_DEAD_ZONE_UP;
@@ -38,12 +38,12 @@ void SonicMotion::handle() {
       }
       break;
     case STATE_UP:
-      if (_state.set(STATE_UP, 2)) {
+      if (_state.set(STATE_UP, 3)) {
         _listener->onUpMotion();
       }
       break;
     case STATE_DOWN:
-      if (_state.set(STATE_DOWN, 2)) {
+      if (_state.set(STATE_DOWN, 3)) {
         _listener->onDownMotion();
       }
       break;
