@@ -121,6 +121,8 @@ void BacklightController::_tryConnect() {
 void BacklightController::_applyState() {
   if (_state.enabled) {
     _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness);
+  } else {
+    _data->send(COMMAND_SET_BRIGHTNESS, 0);
   }
   _data->send(COMMAND_SET_EFFECT, _state.effect);
   if (_state.mode == MODE_RGB) {
