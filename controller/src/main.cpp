@@ -5,7 +5,8 @@
 
 #include "Arduino.h"
 #include "WiFiClient.h"
-#include "ESP8266WiFi.h"
+#include <WiFi.h>
+#include <ESPmDNS.h>
 #include "ESPAsyncWebServer.h"
 
 #include <secrets.h>
@@ -29,6 +30,8 @@ mServer Server(&AsyncServer);
 
 IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
+// TaskHandle_t HeightTask;
+
 void setupServer() {
   Loggr.attach(&ws);
   AsyncServer.addHandler(&ws);
@@ -40,9 +43,17 @@ void setupServer() {
   Loggr.start();
 }
 
+// void handleHeight( void * pvParameters ){
+//   for(;;){
+//     Height.handle();
+//   }
+// }
+
 void setup() {
+  Serial.begin(9600);
+  Serial.println("Starting...");
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.begin(115200);
+  Serial2.begin(115200);
   Backlight.connect();
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -52,11 +63,13 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
   blink(3);
+  Serial.println("Started on ");
+  Serial.print(WiFi.localIP());
 }
 
 void loop() {
-  OTA.handle();
   Height.handle();
+  OTA.handle();
   Backlight.handle();
   Store.handle();
 }

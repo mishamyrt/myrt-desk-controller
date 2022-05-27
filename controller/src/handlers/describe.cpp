@@ -6,9 +6,7 @@
 #include "mServer.h"
 
 const char *template_system_state PROGMEM = \
-  "{\"mac\":\"%s\",\"rssi\":%d,\"id\":\"%s\",\"free_heap\":%d}";
-
-const String chip_id = String(ESP.getChipId(), HEX);
+  "{\"mac\":\"%s\",\"rssi\":%d,\"free_heap\":%d}";
 
 void registerDescribeHandler(mServer *server, String mac_address) {
   server->addRoute("/describe")
@@ -20,7 +18,6 @@ void registerDescribeHandler(mServer *server, String mac_address) {
         template_system_state,
         mac_address,
         WiFi.RSSI(),
-        chip_id,
         ESP.getFreeHeap()
       );
       response->setCode(200);

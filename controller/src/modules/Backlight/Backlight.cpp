@@ -6,7 +6,7 @@
 #include <pins.h>
 #include "Backlight.h"
 
-DapMaster LightData(&Serial);
+DapMaster LightData(&Serial2);
 AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 BacklightController Backlight(&LightData, &LightAVR);
 FirmwareReader Reader = FirmwareReader();

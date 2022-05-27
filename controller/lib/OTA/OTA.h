@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
+#include <Arduino.h>
+#include <WiFi.h>
+#include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include "OTAListener.h"

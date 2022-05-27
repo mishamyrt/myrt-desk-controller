@@ -14,9 +14,11 @@ void DapMaster::connect() {
   // Creating fake request with sent state and increased timeout
   // It will cause status read on next step
   _started = false;
-  DapRequest *status_request = new DapRequest{
-    D_SENT, NULL, 0, millis() + 3000
-  };
+  DapRequest *status_request = new DapRequest();
+  status_request->state = D_SENT;
+  status_request->payload = NULL;
+  status_request->payload_length = 0;
+  status_request->expiry = millis() + 3000;
   _addRequest(status_request);
 }
 
@@ -34,9 +36,10 @@ bool DapMaster::send(uint8_t *payload, uint8_t payload_length) {
   if (!_connected) {
     return false;
   }
-  DapRequest *request = new DapRequest{
-    D_CREATED, payload, payload_length
-  };
+  DapRequest *request = new DapRequest();
+  request->state = D_CREATED;
+  request->payload = payload;
+  request->payload_length = payload_length;
   return _addRequest(request);
 }
 

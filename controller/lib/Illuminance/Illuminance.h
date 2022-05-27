@@ -15,9 +15,7 @@ class IlluminanceSensor {
   }
 
   int getValue() {
-    return normalize(
-      analogRead(pin)
-    );
+    return analogRead(pin);
   }
 
  private:

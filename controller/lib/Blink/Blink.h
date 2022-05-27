@@ -7,5 +7,9 @@
 
 #include "Arduino.h"
 
+#ifdef ESP32
+#define LED_BUILTIN 2
+#endif
+
 /// Simple function, that uses internal LED for
 void blink(uint8_t times = 1);

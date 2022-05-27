@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "stdint.h"
-#include "Stream.h"
+#include <Arduino.h>
+#include <stdint.h>
+#include <Stream.h>
 #include "DapRequest.h"
 #include "DapController.h"
 #include "include/FIFO.h"

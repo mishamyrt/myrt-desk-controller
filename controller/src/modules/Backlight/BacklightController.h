@@ -22,7 +22,7 @@ struct RGB {
 
 struct BacklightState {
   ColorMode mode = MODE_RGB;
-  RGB color = RGB{0, 0, 0};
+  RGB color;
   uint8_t temperature = 0;
   uint8_t brightness = 0;
   uint16_t transition = 0;

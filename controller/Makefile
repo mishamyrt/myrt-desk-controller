@@ -2,7 +2,7 @@ all: compile
 
 .PHONY: compile
 compile:
-	pio run
+	pio run -e esp32dev
 
 .PHONY: clear
 clear:
@@ -10,7 +10,7 @@ clear:
 
 .PHONY: ota
 ota:
-	pio run -t upload
+	pio run -e esp32dev -t upload
 
 .PHONY: configure
 configure:

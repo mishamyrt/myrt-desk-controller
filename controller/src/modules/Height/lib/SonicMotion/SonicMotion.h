@@ -5,17 +5,17 @@
 
 #pragma once
 
-#include <NewPing.h>
 #include <Timer.h>
+// #include <VL53L0X.h>
 #include "Listener.h"
 #include "lib/Proven.h"
 
 #define SONIC_PING_INTERVAL 50
 #define MOTION_ACTION_PROOFS 4
 // Trigger zone
-#define MOTION_MAX_HEIGHT 50
-#define MOTION_DEAD_ZONE_DOWN 14
-#define MOTION_DEAD_ZONE_UP 8
+#define MOTION_MAX_HEIGHT 500
+#define MOTION_DEAD_ZONE_DOWN 50
+#define MOTION_DEAD_ZONE_UP 50
 
 enum {
   STATE_FREE,
@@ -26,12 +26,11 @@ enum {
 
 class SonicMotion {
  public:
-  SonicMotion(uint8_t trigger, uint8_t echo);
+  SonicMotion();
   void handle();
   bool disable();
   void enable();
   void setListener(MotionListener *listener);
-  size_t measureDistance();
 
  private:
   bool _enabled = false;
@@ -41,7 +40,7 @@ class SonicMotion {
   size_t _dead_zone_bottom;
   Proven<uint8_t> _state = Proven<uint8_t>(STATE_FREE);
   MotionListener *_listener;
-  NewPing *_sonar;
+  // VL53L0X sensor;
   Timer _ping_debounce;
 
   bool _update();

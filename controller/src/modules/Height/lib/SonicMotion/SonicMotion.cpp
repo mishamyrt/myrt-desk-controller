@@ -4,9 +4,18 @@
 // License. See LICENSE.txt for details.
 
 #include "SonicMotion.h"
+#include <Loggr.h>
+#include <Blink.h>
+#include <Wire.h>
 
-SonicMotion::SonicMotion(uint8_t trigger, uint8_t echo) {
-  _sonar = new NewPing(trigger, echo, 250);
+SonicMotion::SonicMotion() {
+  // Wire.begin();
+  // sensor.setTimeout(500);
+  // if (!sensor.init()) {
+  //   Loggr.print("Failed to detect and initialize TOF sensor!");
+  //   blink(10);
+  //   return;
+  // }
 }
 
 void SonicMotion::setListener(MotionListener *listener) {
@@ -19,7 +28,7 @@ void SonicMotion::handle() {
   }
   switch (_assumeState()) {
     case STATE_FREE:
-      if (_state.set(STATE_FREE, 4)) {
+      if (_state.set(STATE_FREE, 2)) {
         _listener->onMotionEnd(_distance);
       }
       break;
@@ -38,12 +47,12 @@ void SonicMotion::handle() {
       }
       break;
     case STATE_UP:
-      if (_state.set(STATE_UP, 3)) {
+      if (_state.set(STATE_UP, 2)) {
         _listener->onUpMotion();
       }
       break;
     case STATE_DOWN:
-      if (_state.set(STATE_DOWN, 3)) {
+      if (_state.set(STATE_DOWN, 2)) {
         _listener->onDownMotion();
       }
       break;
@@ -90,8 +99,10 @@ bool SonicMotion::_update() {
     return false;
   }
   _ping_debounce.set(SONIC_PING_INTERVAL);
-  // TODO: This method is very unstable. Should be replaced with async median
-  _distance = _sonar->ping() / US_ROUNDTRIP_CM;
+  // _distance = sensor.readRangeSingleMillimeters();
+  // if (sensor.timeoutOccurred()){
+  //   return false;
+  // }
   return true;
 }
 
@@ -105,9 +116,5 @@ bool SonicMotion::disable() {
 
 void SonicMotion::enable() {
   _enabled = true;
-}
-
-size_t SonicMotion::measureDistance() {
-  return _sonar->ping_median(3) / US_ROUNDTRIP_CM;
 }
 
