@@ -11,7 +11,7 @@
 #include "commands/handlers.h"
 
 #define LED_DT 11
-#define LED_COUNT 120
+#define LED_COUNT 92
 #define COLOR_CORRECTION 0xFF7A60
 
 CommandServer Server = CommandServer();

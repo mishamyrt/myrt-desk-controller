@@ -14,7 +14,6 @@
 #include <Blink.h>
 #include <OTA.h>
 #include <mServer.h>
-#include <Illuminance.h>
 #include <Loggr.h>
 #include <Store.h>
 
@@ -28,9 +27,16 @@ AsyncWebServer AsyncServer(80);
 AsyncWebSocket ws("/events");
 mServer Server(&AsyncServer);
 
-IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
+// IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
 
-// TaskHandle_t HeightTask;
+TaskHandle_t HeightTask;
+
+void handleHeight( void * pvParameters ){
+  for(;;){
+    Height.handle();
+  }
+}
+
 
 void setupServer() {
   Loggr.attach(&ws);
@@ -38,16 +44,17 @@ void setupServer() {
   registerDescribeHandler(&Server, WiFi.macAddress());
   registerLightstripHandlers(&Server, &Backlight, &Reader);
   registerLegsHandlers(&Server, &Height);
-  registerSensorHandlers(&Server, &Illuminance);
   Server.initialize();
   Loggr.start();
+  // xTaskCreatePinnedToCore(
+  //     handleHeight, /* Function to implement the task */
+  //     "HeightControll", /* Name of the task */
+  //     10000,  /* Stack size in words */
+  //     NULL,  /* Task input parameter */
+  //     0,  /* Priority of the task */
+  //     &HeightTask,  /* Task handle. */
+  //     0);
 }
-
-// void handleHeight( void * pvParameters ){
-//   for(;;){
-//     Height.handle();
-//   }
-// }
 
 void setup() {
   Serial.begin(9600);
@@ -62,9 +69,10 @@ void setup() {
   OTA.initialize();
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
+  Serial.print("Started on ");
+  Serial.println(WiFi.localIP());
+  Motion.begin();
   blink(3);
-  Serial.println("Started on ");
-  Serial.print(WiFi.localIP());
 }
 
 void loop() {

@@ -5,9 +5,6 @@
 
 #pragma once
 
-#define PIN_TOF_SCL 1
-#define PIN_TOF_SDA 2
-#define PIN_BEKANT_UP 33
-#define PIN_BEKANT_DOWN 32
-#define PIN_LIGHTSTRIP_RESET 21
-#define PIN_PHOTORESISTOR 35
+#define PIN_BEKANT_UP 32
+#define PIN_BEKANT_DOWN 33
+#define PIN_LIGHTSTRIP_RESET 23

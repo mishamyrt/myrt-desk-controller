@@ -8,14 +8,11 @@
 #include <Blink.h>
 #include <Wire.h>
 
-SonicMotion::SonicMotion() {
-  // Wire.begin();
-  // sensor.setTimeout(500);
-  // if (!sensor.init()) {
-  //   Loggr.print("Failed to detect and initialize TOF sensor!");
-  //   blink(10);
-  //   return;
-  // }
+void SonicMotion::begin() {
+  if (!lox.begin()) {
+    Loggr.print("Failed to detect and initialize TOF sensor!");
+    blink(10);
+  }
 }
 
 void SonicMotion::setListener(MotionListener *listener) {
@@ -29,11 +26,13 @@ void SonicMotion::handle() {
   switch (_assumeState()) {
     case STATE_FREE:
       if (_state.set(STATE_FREE, 2)) {
+        _hold_start = 0;
         _listener->onMotionEnd(_distance);
       }
       break;
     case STATE_HOLD:
       if (_state.set(STATE_HOLD, 4)) {
+        _hold_start = millis();
         // Save values for next calculations
         _motion_start_distance = _distance;
         _dead_zone_top = _distance + MOTION_DEAD_ZONE_UP;
@@ -81,7 +80,8 @@ uint8_t SonicMotion::_assumeState() {
     return STATE_HOLD;
   }
   if (_distance > _motion_start_distance + MOTION_MAX_HEIGHT
-    || _distance == 0) {
+    || _distance == 0
+    || millis() - _hold_start > 7000) {
     return STATE_FREE;
   }
 
@@ -99,7 +99,17 @@ bool SonicMotion::_update() {
     return false;
   }
   _ping_debounce.set(SONIC_PING_INTERVAL);
-  // _distance = sensor.readRangeSingleMillimeters();
+  if (lox.Status != VL53L0X_ERROR_NONE) {
+    return false;
+  }
+  VL53L0X_RangingMeasurementData_t measure;
+  lox.rangingTest(&measure, false);
+  if (measure.RangeStatus != 4) {
+    _distance = measure.RangeMilliMeter;
+  } else {
+    _distance = 9999;
+  }
+
   // if (sensor.timeoutOccurred()){
   //   return false;
   // }

@@ -6,7 +6,7 @@
 #pragma once
 
 #include <Timer.h>
-// #include <VL53L0X.h>
+#include <Adafruit_VL53L0X.h>
 #include "Listener.h"
 #include "lib/Proven.h"
 
@@ -26,7 +26,7 @@ enum {
 
 class SonicMotion {
  public:
-  SonicMotion();
+  void begin();
   void handle();
   bool disable();
   void enable();
@@ -38,9 +38,10 @@ class SonicMotion {
   size_t _motion_start_distance;
   size_t _dead_zone_top;
   size_t _dead_zone_bottom;
+  uint64_t _hold_start = 0;
   Proven<uint8_t> _state = Proven<uint8_t>(STATE_FREE);
   MotionListener *_listener;
-  // VL53L0X sensor;
+  Adafruit_VL53L0X lox = Adafruit_VL53L0X();
   Timer _ping_debounce;
 
   bool _update();
