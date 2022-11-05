@@ -1,6 +1,6 @@
 all: compile
 
-DEVICE_ADDRESS = 192.168.31.122
+DEVICE_ADDRESS = 192.168.31.16
 FIRMWARE_PATH = .pio/build/nanoatmega328/firmware
 
 .PHONY: compile
