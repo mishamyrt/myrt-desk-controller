@@ -5,6 +5,6 @@
 
 #pragma once
 
-#define PIN_BEKANT_UP 32
-#define PIN_BEKANT_DOWN 33
+#define PIN_BEKANT_UP 33
+#define PIN_BEKANT_DOWN 32
 #define PIN_LIGHTSTRIP_RESET 23
