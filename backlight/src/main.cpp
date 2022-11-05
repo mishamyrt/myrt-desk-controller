@@ -10,7 +10,7 @@
 #include "WS2812Strip.h"
 #include "commands/handlers.h"
 
-#define LED_DT 11
+#define LED_DT 10
 #define LED_COUNT 92
 #define COLOR_CORRECTION 0xFF7A60
 
