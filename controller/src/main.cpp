@@ -68,8 +68,6 @@ void setup() {
   }
   setupServer();
   OTA.initialize();
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
   blink(3);
 }
 
