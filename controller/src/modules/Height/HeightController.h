@@ -9,7 +9,6 @@
 #include <Timer.h>
 #include <Stopwatch.h>
 #include "lib/Bekant/Bekant.h"
-#include "lib/SonicMotion/SonicMotion.h"
 
 #include <Loggr.h>
 
@@ -18,22 +17,16 @@ struct HeightState {
   size_t headroom;
 };
 
-class HeightController : public MotionListener {
+class HeightController {
  public:
-  HeightController(Bekant *motor, SonicMotion *motion);
+  HeightController(Bekant *motor);
 
   size_t get();
   bool set(size_t height);
   void handle();
 
-  void onUpMotion() override;
-  void onDownMotion() override;
-  void onHoldMotion() override;
-  void onMotionEnd(size_t distance) override;
-
  private:
   Bekant *_motor;
-  SonicMotion *_motion;
   size_t _target_height;
   HeightState _state;
   Timer _move;

@@ -5,12 +5,9 @@
 
 #include "HeightController.h"
 
-HeightController::HeightController(Bekant *motor, SonicMotion *motion) {
+HeightController::HeightController(Bekant *motor) {
   _motor = motor;
-  _motion = motion;
-  _motion->setListener(this);
   _state.height = _motor->getHeight();
-  _motion->enable();
 }
 
 bool HeightController::set(size_t height) {
@@ -36,27 +33,8 @@ void HeightController::handle() {
     _motor->stop();
     _state.height = _motor->getHeight();
     _moving_to_target = false;
-    _motion->enable();
     return;
   }
-  _motion->handle();
-}
-
-void HeightController::onUpMotion() {
-  _motor->moveUp();
-}
-
-void HeightController::onDownMotion() {
-  _motor->moveDown();
-}
-
-void HeightController::onHoldMotion() {
-  _motor->stop();
-}
-
-void HeightController::onMotionEnd(size_t distance) {
-  _motor->stop();
-  _state.height = _motor->getHeight();
 }
 
 size_t HeightController::get() {

@@ -6,5 +6,4 @@
 #include "Height.h"
 
 Bekant Motors(PIN_BEKANT_UP, PIN_BEKANT_DOWN);
-SonicMotion Motion;
-HeightController Height(&Motors, &Motion);
+HeightController Height(&Motors);

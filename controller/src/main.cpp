@@ -57,21 +57,19 @@ void setupServer() {
 }
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Starting...");
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+  blink(1);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial2.begin(115200);
   Backlight.connect();
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(300);
   }
   setupServer();
   OTA.initialize();
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  Serial.print("Started on ");
-  Serial.println(WiFi.localIP());
-  Motion.begin();
   blink(3);
 }
 
