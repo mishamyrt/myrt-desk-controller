@@ -9,9 +9,8 @@
 #include "lib/DapMaster/DapMaster.h"
 #include "lib/Controller/BacklightController.h"
 
-void registerBacklightDomain(DomainCommander *commander);
-
 extern DapMaster LightData;
 extern AVRLord LightAVR;
 extern BacklightController Backlight;
 extern FirmwareReader Reader;
+extern Domain BacklightDomain;

@@ -14,11 +14,11 @@ void DomainCommander::handle(AsyncUDPPacket *packet) {
   // Find domain
   bool success = false;
   CommanderResponse *resp = new CommanderResponse(packet);
-  for (uint8_t i = 0; i < this->_head; i++) {
-    if (this->_domains[i].code == message[1]) {
+  for (uint8_t i = 0; i < this->_count; i++) {
+    if (this->_domains[i] != NULL && this->_domains[i]->code() == message[1]) {
       // Handle command on domain
       resp->setDomain(message[1]);
-      success = this->_domains[i].handle(&message[2], length - 2, resp);
+      success = this->_domains[i]->handle(&message[2], length - 2, resp);
       break;
     }
   }
@@ -36,12 +36,12 @@ void DomainCommander::handle(AsyncUDPPacket *packet) {
   delete resp;
 }
 
-bool DomainCommander::add(Code code, DomainInitializer init) {
-  if (this->_head >= COMMANDER_DOMAINS_MAX) {
+bool DomainCommander::add(Domain *domain) {
+  if (this->_count >= COMMANDER_DOMAINS_MAX) {
     return false;
   }
-  this->_domains[this->_head].code = code;
-  init(&this->_domains[this->_head]);
-  this->_head++;
+  this->_domains[this->_count] = domain;
+  this->_count = this->_count + 1;
+  domain->initialize();
   return true;
 }

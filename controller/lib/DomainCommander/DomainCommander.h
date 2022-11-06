@@ -19,11 +19,11 @@ class DomainCommander {
     }
     void handle(AsyncUDPPacket *packet);
 
-    bool add(Code code, DomainInitializer init);
+    bool add(Domain *domain);
 
   private:
     AsyncUDP *_connection;
-    Domain _domains[COMMANDER_DOMAINS_MAX];
-    uint8_t _head;
+    Domain *_domains[COMMANDER_DOMAINS_MAX];
+    uint8_t _count = 0;
 };
 
