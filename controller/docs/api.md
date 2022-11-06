@@ -55,17 +55,22 @@ The domain for managing everything related to backlighting.
 * `0x1` - Set effect.
   ```sh
   # Input:
-  3 1 1 <effect_id>
+  <args_count + 3> 1 1 <effect_id> [...args]
   ```
-* `0x2` - Set color.
+* `0x2` - Set effect data.
   ```sh
   # Input:
-  5 1 2 <r> <g> <b>
+  <args_count + 2> 1 2 [...args]
   ```
-* `0x3` - Set white temperature.
+* `0x3` - Set color.
   ```sh
   # Input:
-  3 1 3 <temperature>
+  5 1 3 <r> <g> <b>
+  ```
+* `0x4` - Set white temperature.
+  ```sh
+  # Input:
+  3 1 4 <temperature>
   ```
 
 ### `0x2` Legs
