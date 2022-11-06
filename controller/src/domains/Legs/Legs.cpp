@@ -20,4 +20,11 @@ Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
     r->flush();
     return true;
   });
+  domain->on(COMMAND_LEGS_SET_HEIGHT, [](uint8_t *m, size_t l, CommanderResponse *r) {
+    if (l != 2) {
+      return false;
+    }
+    size_t height = (m[0] << 8) + m[1];
+    return Height.set(height);
+  });
 });
