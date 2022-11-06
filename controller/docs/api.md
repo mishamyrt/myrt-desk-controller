@@ -1,6 +1,6 @@
 # UDP Packet structure
 
-This describes the UDP API of the desk, which was designed to replace the REST API with JSON. The overhead proved to be too much for ESP32.
+This describes the UDP API of the desk, which was designed to replace the JSON REST API. The overhead proved to be too much for ESP32.
 
 ## Formats
 
