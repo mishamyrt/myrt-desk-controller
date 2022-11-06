@@ -8,9 +8,8 @@
 #include <Arduino.h>
 #include <Timer.h>
 #include <Stopwatch.h>
-#include "lib/Bekant/Bekant.h"
-
 #include <Loggr.h>
+#include "../Bekant/Bekant.h"
 
 struct HeightState {
   size_t height;

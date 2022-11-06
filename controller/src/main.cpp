@@ -17,13 +17,11 @@
 #include <mServer.h>
 #include <Loggr.h>
 #include <Store.h>
-#include <Height.h>
 
 // New domains
 #include <DomainCommander.h>
-#include <Backlight.h>
-
-#include "handlers/register.h"
+#include <BacklightDomain.h>
+#include <LegsDomain.h>
 
 // Server
 AsyncWebServer AsyncServer(80);
@@ -41,11 +39,9 @@ void handlePacket(AsyncUDPPacket packet) {
 void setupServer() {
   Loggr.attach(&ws);
   AsyncServer.addHandler(&ws);
-  // Old REST handlers
-  registerDescribeHandler(&Server, WiFi.macAddress());
-  registerLegsHandlers(&Server, &Height);
   // New UDP binary domains
-  registerBacklightDomain(&Commander);
+  Commander.add(&BacklightDomain);
+  Commander.add(&LegsDomain);
   Server.initialize();
   Loggr.start();
   if(udp.listen(port)) {
@@ -58,8 +54,6 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   blink(1);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial2.begin(115200);
-  Backlight.connect();
   while (WiFi.status() != WL_CONNECTED) {
     delay(300);
   }

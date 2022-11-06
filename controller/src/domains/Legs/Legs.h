@@ -6,8 +6,11 @@
 #pragma once
 
 #include <pins.h>
-#include "HeightController.h"
-#include "lib/Bekant/Bekant.h"
+#include <DomainCommander.h>
+#include "Controller/HeightController.h"
+#include "Bekant/Bekant.h"
 
 extern Bekant Motors;
 extern HeightController Height;
+
+extern Domain LegsDomain;
