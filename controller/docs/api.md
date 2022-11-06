@@ -50,8 +50,9 @@ The domain for managing everything related to backlighting.
   2 1 0
 
   # Output:
-  9 1 0 <enabled> <effect> <r> <g> <b> <temperature> <brightness>
+  10 1 0 <enabled> <effect> <mode> <r> <g> <b> <temperature> <brightness>
   ```
+  `mode` is [enum value](src/domains/Backlight/constants.h).
 * `0x1` - Set effect.
   ```sh
   # Input:
@@ -76,6 +77,11 @@ The domain for managing everything related to backlighting.
   ```sh
   # Input:
   3 1 5 <brightness>
+  ```
+* `0x6` - Turn off.
+  ```sh
+  # Input:
+  3 1 6
   ```
 
 ### `0x2` Legs
