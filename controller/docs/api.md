@@ -50,7 +50,7 @@ The domain for managing everything related to backlighting.
   2 1 0
 
   # Output:
-  8 1 <enabled> <effect> <r> <g> <b> <temperature> <brightness>
+  9 1 0 <enabled> <effect> <r> <g> <b> <temperature> <brightness>
   ```
 * `0x1` - Set effect.
   ```sh
@@ -72,6 +72,11 @@ The domain for managing everything related to backlighting.
   # Input:
   3 1 4 <temperature>
   ```
+* `0x5` - Set brightness.
+  ```sh
+  # Input:
+  3 1 5 <brightness>
+  ```
 
 ### `0x2` Legs
 
@@ -82,7 +87,7 @@ The domain for managing desk legs height.
   2 2 0
 
   # Output:
-  2 2 <height>
+  3 2 0 <height>
   ```
 * `0x1` - Set height.
   ```sh
