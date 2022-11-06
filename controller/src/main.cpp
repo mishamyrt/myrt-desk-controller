@@ -6,6 +6,7 @@
 #include "Arduino.h"
 #include "WiFiClient.h"
 #include <WiFi.h>
+#include <AsyncUDP.h>
 #include <ESPmDNS.h>
 #include "ESPAsyncWebServer.h"
 
@@ -16,8 +17,10 @@
 #include <mServer.h>
 #include <Loggr.h>
 #include <Store.h>
-
 #include <Height.h>
+
+// New domains
+#include <DomainCommander.h>
 #include <Backlight.h>
 
 #include "handlers/register.h"
@@ -26,34 +29,28 @@
 AsyncWebServer AsyncServer(80);
 AsyncWebSocket ws("/events");
 mServer Server(&AsyncServer);
+AsyncUDP udp;
+DomainCommander Commander;
 
-// IlluminanceSensor Illuminance(PIN_PHOTORESISTOR, 100);
+const uint16_t port = 11011;
 
-TaskHandle_t HeightTask;
-
-void handleHeight( void * pvParameters ){
-  for(;;){
-    Height.handle();
-  }
+void handlePacket(AsyncUDPPacket packet) {
+  Commander.handle(&packet);
 }
-
 
 void setupServer() {
   Loggr.attach(&ws);
   AsyncServer.addHandler(&ws);
+  // Old REST handlers
   registerDescribeHandler(&Server, WiFi.macAddress());
-  registerLightstripHandlers(&Server, &Backlight, &Reader);
   registerLegsHandlers(&Server, &Height);
+  // New UDP binary domains
+  registerBacklightDomain(&Commander);
   Server.initialize();
   Loggr.start();
-  // xTaskCreatePinnedToCore(
-  //     handleHeight, /* Function to implement the task */
-  //     "HeightControll", /* Name of the task */
-  //     10000,  /* Stack size in words */
-  //     NULL,  /* Task input parameter */
-  //     0,  /* Priority of the task */
-  //     &HeightTask,  /* Task handle. */
-  //     0);
+  if(udp.listen(port)) {
+    udp.onPacket(handlePacket);
+  }
 }
 
 void setup() {

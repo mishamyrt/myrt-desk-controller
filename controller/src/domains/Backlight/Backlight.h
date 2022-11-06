@@ -4,10 +4,12 @@
 // License. See LICENSE.txt for details.
 
 #pragma once
-
+#include <DomainCommander.h>
 #include "lib/AVRLord/AVRLord.h"
 #include "lib/DapMaster/DapMaster.h"
-#include "BacklightController.h"
+#include "lib/Controller/BacklightController.h"
+
+void registerBacklightDomain(DomainCommander *commander);
 
 extern DapMaster LightData;
 extern AVRLord LightAVR;

@@ -8,9 +8,9 @@
 #include <Arduino.h>
 #include <Loggr.h>
 #include <Store.h>
-#include "lib/DapMaster/DapMaster.h"
-#include "lib/AVRLord/AVRLord.h"
-#include "constants.h"
+#include "../DapMaster/DapMaster.h"
+#include "../AVRLord/AVRLord.h"
+#include "../../constants.h"
 
 #define LIGHTSTRIP_CONNECT_ATTEMPTS 3
 
@@ -24,7 +24,7 @@ struct BacklightState {
   ColorMode mode = MODE_RGB;
   RGB color;
   uint8_t temperature = 0;
-  uint8_t brightness = 0;
+  uint8_t brightness = 100;
   uint16_t transition = 0;
   uint8_t effect = 0;
   bool enabled = false;
