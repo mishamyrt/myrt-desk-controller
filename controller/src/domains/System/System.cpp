@@ -6,5 +6,8 @@ Domain SystemDomain(DOMAIN_SYSTEM, [](Domain *domain) {
     ESP.restart();
     return true;
   });
+  domain->on(COMMAND_SYSTEM_PING, [](uint8_t *m, size_t l, CommanderResponse *r) {
+    return true;
+  });
 });
 

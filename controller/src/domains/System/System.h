@@ -7,7 +7,3 @@
 #include <DomainCommander.h>
 
 extern Domain SystemDomain;
-
-#define DOMAIN_SYSTEM 0
-#define COMMAND_SYSTEM_READ 0
-#define COMMAND_SYSTEM_REBOOT 1
