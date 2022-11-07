@@ -93,10 +93,10 @@ The domain for managing desk legs height.
   2 2 0
 
   # Output:
-  3 2 0 <height>
+  4 2 0 <height_high_byte> <height_low_byte>
   ```
 * `0x1` - Set height.
   ```sh
   # Input:
-  3 2 1 <height>
+  4 2 1 <height_high_byte> <height_low_byte>
   ```
