@@ -27,7 +27,7 @@ void CommandServer::handle() {
 bool CommandServer::handleMessage(uint8_t *message, uint8_t length) {
   for (uint8_t i = 0; i < _handlers_count; i++) {
     if (_handlers[i].code == message[0]) {
-      return _handlers[i].handle(message, length);
+      return _handlers[i].handle(&message[1], length - 1);
     }
   }
   return false;

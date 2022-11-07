@@ -13,6 +13,8 @@ class ProgressEffect : public Effect {
   void finalize(EffectStateController *host);
   void onColorUpdate(EffectStateController *host);
   void prepare(EffectStateController *host, Strip *strip);
+  bool setArguments(EffectStateController *controller, uint8_t *args, uint8_t length);
+  bool setData(EffectStateController *controller, uint8_t *data, uint8_t length);
 
  private:
   uint8_t _stage;

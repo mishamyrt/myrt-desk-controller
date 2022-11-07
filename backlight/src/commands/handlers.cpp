@@ -8,23 +8,19 @@
 #include <Effects.h>
 #include <commands.h>
 
-#define COMMAND_EFFECT_NONE 0
-#define COMMAND_EFFECT_RAINBOW 1
-#define COMMAND_EFFECT_PROGRESS 2
-
 bool handleSetColor(uint8_t *message, uint8_t length) {
-  if (length < 4) {
+  if (length != 3) {
     return false;
   }
-  Animator.setColor(message[1], message[2], message[3]);
+  Animator.setColor(message[0], message[1], message[2]);
   return true;
 }
 
 bool handleSetBrightness(uint8_t *message, uint8_t length) {
-  if (length < 2) {
+  if (length != 1) {
     return false;
   }
-  Animator.setBrightness(message[1]);
+  Animator.setBrightness(message[0]);
   return true;
 }
 
@@ -32,30 +28,29 @@ bool handleSetBrightness(uint8_t *message, uint8_t length) {
 // For example, if `temperature` argument is 130,
 // then real temperature is 2700+((6500-2700)*(130/255))=4637K.
 bool handleSetTemperature(uint8_t *message, uint8_t length) {
-  if (length < 2) {
+  if (length != 1) {
     return false;
   }
   // Lightstrip calibrated to be 6500 Kelvin on white.
   // Blends with orange color, that gives about 2700K.
-  CRGB color = blend(0xFFFFFF, 0xFF872B, message[1]);
+  CRGB color = blend(0xFFFFFF, 0xFF872B, message[0]);
   Animator.setColor(color.r, color.g, color.b);
   return true;
 }
 
 bool handleSetTransition(uint8_t *message, uint8_t length) {
-  if (length < 3) {
+  if (length != 2) {
     return false;
   }
-  Animator.setTransition((message[1] << 8) + message[2]);
+  Animator.setTransition((message[0] << 8) + message[1]);
   return true;
 }
 
 bool handleSetEffect(uint8_t *message, uint8_t length) {
-  if (length < 2) {
+  if (length < 1) {
     return false;
   }
-  switch (message[1]) {
-    // TODO: Use mapper function
+  switch (message[0]) {
     case COMMAND_EFFECT_NONE:
       Animator.setEffect(&Fill);
       break;

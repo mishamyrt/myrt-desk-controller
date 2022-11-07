@@ -32,6 +32,14 @@ void RainbowEffect::prepare(EffectStateController *controller, Strip *strip) {
   );
 }
 
+bool RainbowEffect::setArguments(EffectStateController *controller, uint8_t *args, uint8_t length) {
+  return false;
+}
+
+bool RainbowEffect::setData(EffectStateController *controller, uint8_t *data, uint8_t length) {
+  return false;
+}
+
 uint8_t RainbowEffect::_hueShift(uint8_t shift) {
   return (_progress.value() + shift) % 255;
 }

@@ -37,6 +37,14 @@ bool ProgressEffect::handle(EffectStateController *host, Strip *strip) {
   return true;
 }
 
+bool ProgressEffect::setArguments(EffectStateController *controller, uint8_t *args, uint8_t length) {
+  return false;
+}
+
+bool ProgressEffect::setData(EffectStateController *controller, uint8_t *data, uint8_t length) {
+  return false;
+}
+
 void ProgressEffect::finalize(EffectStateController *host) {
   _color_progress.setDuration(host->transition_time());
   _stage = STAGE_OUTRO;

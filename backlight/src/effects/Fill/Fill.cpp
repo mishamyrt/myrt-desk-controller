@@ -27,6 +27,14 @@ void FillEffect::finalize(EffectStateController *controller) {
   controller->onEffectFinished();
 }
 
+bool FillEffect::setArguments(EffectStateController *controller, uint8_t *args, uint8_t length) {
+  return false;
+}
+
+bool FillEffect::setData(EffectStateController *controller, uint8_t *data, uint8_t length) {
+  return false;
+}
+
 void FillEffect::onColorUpdate(EffectStateController *controller) {
   _progress.setDuration(
     controller->transition_time()

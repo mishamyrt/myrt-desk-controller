@@ -36,6 +36,14 @@ void Effector::setEffect(Effect *effect) {
   _effect->finalize(this);
 }
 
+bool Effector::setEffectArgs(uint8_t *args, uint8_t length) {
+  return _effect->setArguments(this, args, length);
+}
+
+bool Effector::setEffectData(uint8_t *args, uint8_t length) {
+  return _effect->setData(this, args, length);
+}
+
 void Effector::setColor(uint8_t r, uint8_t g, uint8_t b) {
   _target_color.r = r;
   _target_color.g = g;

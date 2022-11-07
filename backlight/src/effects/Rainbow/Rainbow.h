@@ -13,6 +13,8 @@ class RainbowEffect : public Effect {
   void finalize(EffectStateController *controller);
   void onColorUpdate(EffectStateController *controller);
   void prepare(EffectStateController *controller, Strip *strip);
+  bool setArguments(EffectStateController *controller, uint8_t *args, uint8_t length);
+  bool setData(EffectStateController *controller, uint8_t *data, uint8_t length);
 
  private:
   TimeProgress _progress = TimeProgress();

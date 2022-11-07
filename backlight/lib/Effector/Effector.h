@@ -27,6 +27,8 @@ class Effect {
   virtual bool handle(EffectStateController *controller, Strip *strip) = 0;
   virtual void finalize(EffectStateController *controller) = 0;
   virtual void onColorUpdate(EffectStateController *controller) = 0;
+  virtual bool setArguments(EffectStateController *controller, uint8_t *args, uint8_t length) = 0;
+  virtual bool setData(EffectStateController *controller, uint8_t *args, uint8_t length) = 0;
   virtual void prepare(EffectStateController *controller, Strip *strip) = 0;
 };
 
@@ -39,6 +41,8 @@ class Effector : public EffectStateController {
   void handle();
   void applyEffect(Effect *effect);
   void setEffect(Effect *effect);
+  bool setEffectArgs(uint8_t *args, uint8_t length);
+  bool setEffectData(uint8_t *args, uint8_t length);
   void setColor(uint8_t r, uint8_t g, uint8_t b);
   void setBrightness(uint8_t brightness);
   void setTransition(uint32_t time);
