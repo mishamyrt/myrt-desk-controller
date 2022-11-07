@@ -1,7 +1,6 @@
 all: compile
 
-.PHONY: compile
-compile:
+.pio/build/esp32dev/firmware.bin:
 	pio run -e esp32dev
 
 .PHONY: clear
@@ -10,7 +9,7 @@ clear:
 
 .PHONY: ota
 ota:
-	pio run -e esp32dev -t upload
+	myrt_desk flash-controller .pio/build/esp32dev/firmware.bin
 
 .PHONY: configure
 configure:

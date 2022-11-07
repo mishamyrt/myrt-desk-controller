@@ -7,12 +7,9 @@ FIRMWARE_PATH = .pio/build/nanoatmega328/firmware
 compile:
 	pio run
 
-ab: compile
-	node scripts/hex2ab $(FIRMWARE_PATH).hex
-
 .PHONY: ota
-ota: ab
-	./scripts/flash-ab.sh $(DEVICE_ADDRESS) $(FIRMWARE_PATH).ab
+ota: compile
+	myrt_desk flash-backlight .pio/build/nanoatmega328/firmware.hex
 
 .PHONY: clear
 clear:
