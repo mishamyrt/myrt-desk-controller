@@ -8,9 +8,18 @@
 void DomainCommander::handle(AsyncUDPPacket *packet) {
   uint8_t *message = packet->data();
   size_t length = packet->length();
-  if (length < 3 || length - 1 != message[0]) {
+  size_t payload_length = 0;
+  if (length < 3) {
+    return;
+  } else if (message[0] == 111 && length > 3) {
+    payload_length = (message[1] << 8) + message[2];
+  } else {
+    payload_length = message[0];
+  }
+  if (payload_length != length - 1) {
     return;
   }
+
   // Find domain
   bool success = false;
   CommanderResponse *resp = new CommanderResponse(packet);
@@ -23,10 +32,9 @@ void DomainCommander::handle(AsyncUDPPacket *packet) {
     }
   }
   if (resp->sent()) {
+    delete resp;
     return;
   }
-  resp->append(message[1]);
-  resp->append(message[2]);
   if (success) {
     resp->append(0);
   } else {

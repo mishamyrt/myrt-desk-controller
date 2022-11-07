@@ -5,7 +5,7 @@
 #include <AsyncUDP.h>
 #include "Response.h"
 
-#define DOMAIN_MAX_COMANDS 8
+#define DOMAIN_MAX_COMANDS 16
 
 typedef uint8_t Code;
 
