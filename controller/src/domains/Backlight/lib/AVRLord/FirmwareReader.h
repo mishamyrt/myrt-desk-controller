@@ -8,38 +8,52 @@
 #include "Arduino.h"
 
 #define PAGE_SIZE 128
+#define MAX_SIZE 21675
 
 class FirmwareReader {
  public:
   size_t size() {
-    return _size;
+    return this->_size;
   }
 
   uint8_t valueAt(size_t idx) {
-    if (idx >= _size) {
+    if (idx >= this->_size) {
       return 0;
     }
-    return data[idx];
+    return this->_data[idx];
   }
 
-  void create(size_t size) {
-    delete[] data;
-    _size = size;
-    data = new uint8_t[size];
+  bool create(size_t size) {
+    if (size > MAX_SIZE) {
+      return false;
+    }
+    if (this->_data != NULL) {
+      delete [] this->_data;
+    }
+    this->_size = size;
+    this->_offset = 0;
+    this->_data = new uint8_t[size];
+    return true;
   }
 
   void clear() {
-    delete [] data;
-    _size = 0;
+    delete [] this->_data;
+    this->_size = 0;
   }
 
-  void appendChunk (uint8_t *data, size_t length, size_t index) {
-    for (size_t i = 0; i < length; i++) {
-      this->data[i + index] = data[i];
+  bool appendChunk (uint8_t *data, size_t length) {
+    if (this->_offset + length > this->_size) {
+      return false;
     }
+    for (size_t i = 0; i < length; i++) {
+      this->_data[i + this->_offset] = data[i];
+    }
+    this->_offset += length;
+    return true;
   }
 
  private:
   size_t _size;
-  uint8_t *data;
+  size_t _offset;
+  uint8_t *_data;
 };

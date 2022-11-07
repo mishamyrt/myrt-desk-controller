@@ -18,9 +18,13 @@ BacklightController::BacklightController(
 
 void BacklightController::handle() {
   if (_firmware != NULL) {
+    Loggr.message = "Updating";
+    Loggr.flush();
     _board->flash(_firmware);
     _firmware->clear();
     _firmware = NULL;
+    Loggr.message = "Done, rebooting";
+    Loggr.flush();
     ESP.restart();
     return;
   }
@@ -28,6 +32,8 @@ void BacklightController::handle() {
 }
 
 void BacklightController::updateFirmware(FirmwareReader *firmware) {
+  Loggr.message = "Set firmware update";
+  Loggr.flush();
   _firmware = firmware;
 }
 

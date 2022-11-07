@@ -55,5 +55,31 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     }
     return Backlight.setEffect(m[0]);
   });
+  domain->on(
+    COMMAND_BACKLIGHT_FIRMWARE_RECEIVE,
+    [](uint8_t *m, size_t l, CommanderResponse *r) {
+      if (l != 2) {
+        return false;
+      }
+      Reader.create((m[0] << 8) + m[1]);
+      return true;
+    });
+  domain->on(
+    COMMAND_BACKLIGHT_FIRMWARE_FRAME,
+    [](uint8_t *m, size_t l, CommanderResponse *r) {
+      if (Reader.size() == 0 || m[l - 1] != 111) {
+        return false;
+      }
+      return Reader.appendChunk(m, l - 1);
+    });
+  domain->on(
+    COMMAND_BACKLIGHT_FIRMWARE_APPLY,
+    [](uint8_t *m, size_t l, CommanderResponse *r) {
+      if (Reader.size() == 0 || l != 0) {
+        return false;
+      }
+      Backlight.updateFirmware(&Reader);
+      return true;
+    });
 });
 
