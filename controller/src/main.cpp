@@ -22,6 +22,7 @@
 #include <DomainCommander.h>
 #include <BacklightDomain.h>
 #include <LegsDomain.h>
+#include <SystemDomain.h>
 
 // Server
 AsyncWebServer AsyncServer(80);
@@ -42,6 +43,7 @@ void setupServer() {
   // New UDP binary domains
   Commander.add(&BacklightDomain);
   Commander.add(&LegsDomain);
+  Commander.add(&SystemDomain);
   Server.initialize();
   Loggr.start();
   if(udp.listen(port)) {
