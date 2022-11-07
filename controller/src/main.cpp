@@ -14,7 +14,6 @@
 #include <pins.h>
 #include <Blink.h>
 #include <OTA.h>
-#include <mServer.h>
 #include <Loggr.h>
 #include <Store.h>
 
@@ -27,7 +26,6 @@
 // Server
 AsyncWebServer AsyncServer(80);
 AsyncWebSocket ws("/events");
-mServer Server(&AsyncServer);
 AsyncUDP udp;
 DomainCommander Commander;
 
@@ -44,7 +42,6 @@ void setupServer() {
   Commander.add(&BacklightDomain);
   Commander.add(&LegsDomain);
   Commander.add(&SystemDomain);
-  Server.initialize();
   Loggr.start();
   if(udp.listen(port)) {
     udp.onPacket(handlePacket);
