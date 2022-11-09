@@ -8,7 +8,7 @@ clear:
 	rm -rf .pio
 
 .PHONY: ota
-ota:
+ota: .pio/build/esp32dev/firmware.bin
 	myrt_desk flash-controller .pio/build/esp32dev/firmware.bin
 
 .PHONY: configure

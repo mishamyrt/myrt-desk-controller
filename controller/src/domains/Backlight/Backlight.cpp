@@ -50,10 +50,15 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     return Backlight.powerOff();
   });
   domain->on(COMMAND_BACKLIGHT_SET_EFFECT, [](uint8_t *m, size_t l, CommanderResponse *r) {
-    if (l != 1) {
-      return false;
+    if (l == 1) {
+      return Backlight.setEffect(m[0]);
+    } else if (l > 1) {
+      return Backlight.setEffect(m[0], &m[1], l - 1);
     }
-    return Backlight.setEffect(m[0]);
+    return false;
+  });
+  domain->on(COMMAND_BACKLIGHT_SET_EFFECT_DATA, [](uint8_t *m, size_t l, CommanderResponse *r) {
+    return Backlight.setEffectData(m, l);
   });
   domain->on(
     COMMAND_BACKLIGHT_FIRMWARE_RECEIVE,

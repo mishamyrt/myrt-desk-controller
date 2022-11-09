@@ -8,3 +8,4 @@
 #include "Fill/Fill.h"
 #include "Rainbow/Rainbow.h"
 #include "Progress/Progress.h"
+#include "Ambient/Ambient.h"

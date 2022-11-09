@@ -119,6 +119,27 @@ bool BacklightController::setEffect(uint8_t effect_code) {
   return _data->send(COMMAND_SET_EFFECT, _state.effect);
 }
 
+bool BacklightController::setEffect(uint8_t effect_code, uint8_t *args, uint8_t length) {
+  _state.effect = effect_code;
+  _descriptor.update();
+  uint8_t *message = new uint8_t[length + 2];
+  message[0] = COMMAND_SET_EFFECT;
+  message[1] = effect_code;
+  for (uint8_t i = 0; i < length; i++) {
+    message[i + 2] = args[i];
+  }
+  return _data->send(message, length + 2);
+}
+
+bool BacklightController::setEffectData(uint8_t *data, uint8_t length) {
+  uint8_t *message = new uint8_t[length + 1];
+  message[0] = COMMAND_SET_EFFECT_DATA;
+  for (uint8_t i = 0; i < length; i++) {
+    message[i + 1] = data[i];
+  }
+  return _data->send(message, length + 1);
+}
+
 void BacklightController::_tryConnect() {
   _board->reset();
   _data->connect();

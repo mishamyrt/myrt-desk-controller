@@ -68,6 +68,8 @@ class BacklightController : public DapController {
   bool setTemperature(uint8_t temperature);
   bool setTransition(uint16_t transition);
   bool setEffect(uint8_t effect_code);
+  bool setEffect(uint8_t effect_code, uint8_t *args, uint8_t length);
+  bool setEffectData(uint8_t *data, uint8_t length);
   bool powerOn();
   bool powerOff();
 

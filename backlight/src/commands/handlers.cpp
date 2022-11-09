@@ -46,6 +46,10 @@ bool handleSetTransition(uint8_t *message, uint8_t length) {
   return true;
 }
 
+bool handleSetEffectData(uint8_t *message, uint8_t length) {
+  return Animator.setEffectData(message, length);
+}
+
 bool handleSetEffect(uint8_t *message, uint8_t length) {
   if (length < 1) {
     return false;
@@ -60,6 +64,12 @@ bool handleSetEffect(uint8_t *message, uint8_t length) {
     case COMMAND_EFFECT_PROGRESS:
       Animator.setEffect(&Progress);
       break;
+    case COMMAND_EFFECT_AMBIENT:
+      Animator.setEffect(&Ambient);
+      if (length > 1) {
+        return Animator.setEffectArgs(&message[1], length - 1);
+      }
+      break;
     default:
       return false;
   }
@@ -72,4 +82,5 @@ void registerHandlers(CommandServer *server) {
   server->on(COMMAND_SET_WHITE_TEMPERATURE, &handleSetTemperature);
   server->on(COMMAND_SET_TRANSITION, &handleSetTransition);
   server->on(COMMAND_SET_EFFECT, &handleSetEffect);
+  server->on(COMMAND_SET_EFFECT_DATA, &handleSetEffectData);
 }
