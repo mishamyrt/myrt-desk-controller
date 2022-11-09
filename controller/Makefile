@@ -1,5 +1,6 @@
 all: compile
 
+.PHONY: .pio/build/esp32dev/firmware.bin
 .pio/build/esp32dev/firmware.bin:
 	pio run -e esp32dev
 

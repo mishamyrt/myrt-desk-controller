@@ -17,5 +17,6 @@ bool Domain::handle(uint8_t *message, size_t length, CommanderResponse *resp) {
       return _commands[i].handle(&message[1], length - 1, resp);
     }
   }
+  resp->setCommand(44);
   return false;
 }

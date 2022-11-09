@@ -43,12 +43,18 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     }
     return Backlight.setTemperature(m[0]);
   });
-  domain->on(COMMAND_BACKLIGHT_TURN_OFF, [](uint8_t *m, size_t l, CommanderResponse *r) {
-    if (l != 0) {
+  domain->on(COMMAND_BACKLIGHT_SET_POWER, [](uint8_t *m, size_t l, CommanderResponse *r) {
+    if (l != 1) {
       return false;
     }
-    return Backlight.powerOff();
+    if (m[0] == 0) {
+      return Backlight.powerOff();
+    } else if (m[0] == 1) {
+      return Backlight.powerOn();
+    }
+    return false;
   });
+
   domain->on(COMMAND_BACKLIGHT_SET_EFFECT, [](uint8_t *m, size_t l, CommanderResponse *r) {
     if (l == 1) {
       return Backlight.setEffect(m[0]);
