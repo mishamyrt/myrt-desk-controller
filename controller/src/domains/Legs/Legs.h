@@ -11,6 +11,7 @@
 #include "Bekant/Bekant.h"
 
 extern Bekant Motors;
+extern SensorReader HeightReader;
 extern HeightController Height;
 
 extern Domain LegsDomain;

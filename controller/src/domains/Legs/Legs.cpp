@@ -8,10 +8,12 @@
 #include "ToF/SensorReader.h"
 
 Bekant Motors(PIN_BEKANT_UP, PIN_BEKANT_DOWN);
-HeightController Height(&Motors);
 SensorReader HeightReader = SensorReader();
+HeightController Height(&Motors, &HeightReader);
 
 Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
+  HeightReader.connect();
+  Height.initialize();
   domain->on(COMMAND_LEGS_READ, [](uint8_t *m, size_t l, CommanderResponse *r) {
     if (l > 0) {
       return false;
@@ -33,7 +35,7 @@ Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
     if (l != 0 || !HeightReader.connect()) {
       return false;
     }
-    uint16_t height = HeightReader.get_value(1);
+    uint16_t height = HeightReader.getValue(1);
     r->append(highByte(height));
     r->append(lowByte(height));
     r->flush();

@@ -6,17 +6,23 @@
 #include "SensorReader.h"
 
 bool SensorReader::connect() {
-  if (!_connected && !_sensor.begin()) {
-    return false;
+  if (_connected) {
+    return true;
+  } else if (_sensor.begin()) {
+    _connected = true;
+    return true;
   }
-  return true;
+  return false;
 }
 
 bool SensorReader::connected() {
   return _connected;
 }
 
-uint16_t SensorReader::get_value(uint8_t resolution) {
+uint16_t SensorReader::getValue(uint8_t resolution) {
+  if (!_connected) {
+    return 0;
+  }
   _summ = 0;
   for (_i = 0; _i < resolution; _i++) {
     _sensor.rangingTest(&_measure, false);
@@ -28,5 +34,5 @@ uint16_t SensorReader::get_value(uint8_t resolution) {
   if (resolution == 1) {
     return _summ;
   }
-  return uint16_t(_summ / resolution);
+  return uint16_t(_summ / resolution) + SENSOR_SURFACE_DISTANCE;
 }
