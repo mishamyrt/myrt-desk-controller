@@ -12,7 +12,7 @@
 #include "../Bekant/Bekant.h"
 #include "../ToF/SensorReader.h"
 
-#define STOPPING_DISTANCE_UP 20
+#define STOPPING_DISTANCE_UP 18
 #define STOPPING_DISTANCE_DOWN 10
 
 struct HeightState {

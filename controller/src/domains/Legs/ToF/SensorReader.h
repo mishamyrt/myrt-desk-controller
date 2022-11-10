@@ -21,4 +21,6 @@ class SensorReader {
     uint32_t _summ = 0;
     Adafruit_VL53L0X _sensor = Adafruit_VL53L0X();
     VL53L0X_RangingMeasurementData_t _measure;
+
+    bool _measureDistance();
 };
