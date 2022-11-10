@@ -21,6 +21,9 @@ SRC := \
 	$(wildcard lib/*/*/*/*.h) \
 
 compile: $(FIRMWARE_PATH)
+.PHONY: flash
+flash:
+	pio run -t upload
 
 ota: $(FIRMWARE_PATH)
 	myrt_desk flash-controller $(FIRMWARE_PATH)
