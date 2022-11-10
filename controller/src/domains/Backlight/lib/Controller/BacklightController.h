@@ -25,7 +25,6 @@ struct BacklightState {
   RGB color;
   uint8_t temperature = 0;
   uint8_t brightness = 100;
-  uint16_t transition = 0;
   uint8_t effect = 0;
   bool enabled = false;
 };
@@ -84,7 +83,7 @@ class BacklightController : public DapController {
   AVRLord *_board;
 
   BacklightState _state;
-  Stored _descriptor = Stored(_state);
+  Stored _descriptor = Stored(_state, DOMAIN_BACKLIGHT);
 
   FirmwareReader *_firmware = NULL;
 

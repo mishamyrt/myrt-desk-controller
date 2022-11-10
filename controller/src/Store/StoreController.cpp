@@ -4,6 +4,7 @@
 // License. See LICENSE.txt for details.
 
 #include "StoreController.h"
+#include <Blink.h>
 
 StoreController::StoreController() {
   EEPROM.begin(STORE_SIZE);
@@ -22,7 +23,7 @@ void StoreController::handle() {
 }
 
 bool StoreController::isCorrect(Stored *value) {
-  return EEPROM.read(value->addr + value->addr) != value->key;
+  return EEPROM.read(value->addr + value->size) == value->key;
 }
 
 void StoreController::load(Stored *value) {

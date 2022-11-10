@@ -12,13 +12,13 @@ class Stored {
   uint8_t *data;
   uint16_t size;
   uint8_t key;
-  uint16_t addr;
+  uint16_t addr = 0;
   bool shouldUpdate = false;
 
-  template <typename T> Stored(const T &data) {
+  template <typename T> Stored(const T &data, uint8_t key) {
     this->data = (uint8_t*) &data;  // NOLINT(readability/casting)
     size = sizeof(T);
-    key = random(255);
+    this->key = key;
   }
 
   void update() {

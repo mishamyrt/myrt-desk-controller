@@ -13,18 +13,13 @@ BacklightController::BacklightController(
   _data = connection;
   _data->setController(this);
   _board = board;
-  Store.append(&_descriptor);
 }
 
 void BacklightController::handle() {
   if (_firmware != NULL) {
-    Loggr.message = "Updating";
-    Loggr.flush();
     _board->flash(_firmware);
     _firmware->clear();
     _firmware = NULL;
-    Loggr.message = "Done, rebooting";
-    Loggr.flush();
     ESP.restart();
     return;
   }
@@ -32,14 +27,11 @@ void BacklightController::handle() {
 }
 
 void BacklightController::updateFirmware(FirmwareReader *firmware) {
-  Loggr.message = "Set firmware update";
-  Loggr.flush();
   _firmware = firmware;
 }
 
 /// Handles Dap error
 void BacklightController::onError() {
-  Loggr.print("Got dap error");
   if (_connected) {
     _connected = false;
     connect();
@@ -53,11 +45,11 @@ void BacklightController::onError() {
 void BacklightController::onConnect() {
   _connect_attempts = 0;
   _connected = true;
-  Loggr.print("Dap connected!");
   _applyState();
 }
 
 void BacklightController::connect() {
+  Store.append(&_descriptor);
   _connect_attempts = LIGHTSTRIP_CONNECT_ATTEMPTS;
   _tryConnect();
 }
