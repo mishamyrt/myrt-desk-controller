@@ -8,7 +8,6 @@
 #include <WiFi.h>
 #include <AsyncUDP.h>
 #include <ESPmDNS.h>
-#include "ESPAsyncWebServer.h"
 
 #include <secrets.h>
 #include <pins.h>
@@ -24,8 +23,6 @@
 #include <SystemDomain.h>
 
 // Server
-AsyncWebServer AsyncServer(80);
-AsyncWebSocket ws("/events");
 AsyncUDP udp;
 DomainCommander Commander;
 
