@@ -18,6 +18,8 @@ class CommanderResponse {
 
     void setDomain(uint8_t domain);
 
+    AsyncUDPPacket *packet();
+
     bool sent();
 
     bool append(uint8_t data);

@@ -6,36 +6,40 @@
 #include "Response.h"
 
 CommanderResponse::CommanderResponse(AsyncUDPPacket *packet) {
-  this->_packet = packet;
+  _packet = packet;
 }
 
 void CommanderResponse::setCommand(uint8_t command) {
-  this->_response[2] = command;
+  _response[2] = command;
 }
 
 void CommanderResponse::setDomain(uint8_t domain) {
-  this->_response[1] = domain;
+  _response[1] = domain;
+}
+
+AsyncUDPPacket *CommanderResponse::packet() {
+  return _packet;
 }
 
 void CommanderResponse::flush() {
-  this->_response[0] = this->_length + 2;
-  this->_packet->write(
-    this->_response,
-    this->_length + 3
+  _response[0] = _length + 2;
+  _packet->write(
+    _response,
+    _length + 3
   );
-  this->_sent = true;
+  _sent = true;
 }
 
 bool CommanderResponse::sent() {
-  return this->_sent;
+  return _sent;
 }
 
 bool CommanderResponse::append(uint8_t data) {
   // The zero element stores the length. Clients will expect response in this format
-  if (this->_length >= RESPONSE_MAX_LENGTH) {
+  if (_length >= RESPONSE_MAX_LENGTH) {
     return false;
   }
-  this->_response[this->_length + 3] = data;
-  this->_length = this->_length + 1;
+  _response[_length + 3] = data;
+  _length = _length + 1;
   return true;
 }

@@ -5,37 +5,28 @@
 
 #pragma once
 
-#include "ESPAsyncWebServer.h"
-class Loggr_ {
+#include <AsyncUDP.h>
+
+#define LOGGR_MESSAGE_BUFFER_SIZE 128
+class LoggrProvider {
  public:
   String message;
 
-  void start() {
-    _started = true;
-  }
+  void setProtocol(AsyncUDP *udp);
 
-  void attach(AsyncWebSocket *stream) {
-    _stream = stream;
-  }
+  void setClient(AsyncUDPPacket *client);
 
-  void print(String content) {
-    _send(content);
-  }
+  void send();
 
-  void flush() {
-    _send(message);
-    message = "";
-  }
+  void print(String content);
 
  private:
-  AsyncWebSocket *_stream;
-  bool _started = false;
-
-  void _send(String content) {
-    if (_started) {
-      _stream->textAll(("log: " + content).c_str());
-    }
-  }
+  AsyncUDP *_udp;
+  bool _connected = false;
+  uint16_t _remote_port = 0;
+  IPAddress _remote_ip;
+  unsigned char _message_buffer[128];
+  unsigned char *_message_buffer_ptr = &_message_buffer[0];
 };
 
-extern Loggr_ Loggr;
+extern LoggrProvider Loggr;

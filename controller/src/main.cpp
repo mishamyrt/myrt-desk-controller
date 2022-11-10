@@ -36,13 +36,11 @@ void handlePacket(AsyncUDPPacket packet) {
 }
 
 void setupServer() {
-  Loggr.attach(&ws);
-  AsyncServer.addHandler(&ws);
+  Loggr.setProtocol(&udp);
   // New UDP binary domains
   Commander.add(&BacklightDomain);
   Commander.add(&LegsDomain);
   Commander.add(&SystemDomain);
-  Loggr.start();
   if(udp.listen(port)) {
     udp.onPacket(handlePacket);
   }
