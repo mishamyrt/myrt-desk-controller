@@ -33,7 +33,7 @@ bool handleSetTemperature(uint8_t *message, uint8_t length) {
   }
   // Lightstrip calibrated to be 6500 Kelvin on white.
   // Blends with orange color, that gives about 2700K.
-  CRGB color = blend(0xFFFFFF, 0xFF872B, message[0]);
+  CRGB color = blend(0xFFFFFF, 0xFF851F, message[0]);
   Animator.setColor(color.r, color.g, color.b);
   return true;
 }
