@@ -13,7 +13,6 @@
 #include <pins.h>
 #include <Blink.h>
 #include <OTA.h>
-#include <Loggr.h>
 #include <Store.h>
 
 // New domains
@@ -46,6 +45,7 @@ void setupServer() {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
+  Store.initialize();
   blink(1);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {

@@ -7,11 +7,11 @@
 
 #include <AsyncUDP.h>
 
-#define LOGGR_MESSAGE_BUFFER_SIZE 128
+#define LOGGR_MESSAGE_BUFFER_SIZE 256
+#define LOGGR_PRESERVE_LOGS true
+
 class LoggrProvider {
  public:
-  String message;
-
   void setProtocol(AsyncUDP *udp);
 
   void setClient(AsyncUDPPacket *client);
@@ -22,11 +22,18 @@ class LoggrProvider {
 
  private:
   AsyncUDP *_udp;
-  bool _connected = false;
   uint16_t _remote_port = 0;
   IPAddress _remote_ip;
+  String _message = "";
   unsigned char _message_buffer[128];
+  unsigned int _message_buffer_length = 0;
+  bool _connected = false;
   unsigned char *_message_buffer_ptr = &_message_buffer[0];
+  size_t _result = 0;
+
+  void _flush();
+  void _send_message();
+  void _fillBuffer(const unsigned int length, const unsigned int offset);
 };
 
 extern LoggrProvider Loggr;

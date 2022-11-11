@@ -5,7 +5,6 @@
 
 #include "DapMaster.h"
 #include "DapRequest.h"
-#include <Loggr.h>
 #include "include/FIFO.h"
 #include "include/codes.h"
 
@@ -132,7 +131,6 @@ void DapMaster::_handleRequest(DapRequest *request) {
 /// Reads response from dap device
 void DapMaster::_readResponse(DapRequest *request) {
   if (millis() >= request->expiry) {
-    Loggr.print("Timeout");
     _onError();
     return;
   }
@@ -157,9 +155,6 @@ void DapMaster::_readResponse(DapRequest *request) {
       break;
     case DAP_ERROR:
     case -1:
-      Loggr.message = "Wrong response: ";
-      Loggr.message += data;
-      Loggr.send();
       _onError();
       break;
   }
