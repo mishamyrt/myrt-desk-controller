@@ -9,8 +9,10 @@
 #include <Timer.h>
 #include <Stopwatch.h>
 #include <Loggr.h>
+#include <Store.h>
 #include "../Bekant/Bekant.h"
 #include "../ToF/SensorReader.h"
+#include "../constants.h"
 
 #define STOPPING_DISTANCE_UP 18
 #define STOPPING_DISTANCE_DOWN 10
@@ -29,11 +31,13 @@ class HeightController {
  private:
   Bekant *_motor;
   SensorReader *_reader;
-  size_t _height = BEKANT_MIN_HEIGHT;
+  size_t _height = 0;
   size_t _target_height = 0;
   uint16_t _current_distance = 0;
+  uint16_t _correction = BEKANT_MIN_HEIGHT;
   uint8_t _state = STATE_READY;
   bool _calibrating = false;
+  Stored _descriptor = Stored(_correction, DOMAIN_LEGS);
 
   void _calibrate();
 };

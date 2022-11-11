@@ -14,7 +14,8 @@ HeightController::HeightController(Bekant *motor, SensorReader *reader) {
 
 bool HeightController::initialize() {
   if (_reader != NULL && _reader->connected()) {
-    _reader->setCorrection(BEKANT_MIN_HEIGHT);
+    Store.append(&_descriptor);
+    _reader->setCorrection(_correction);
     _height = _reader->getValue(20);
     return true;
   }
@@ -57,6 +58,7 @@ void HeightController::_calibrate() {
     if (_previous_distance - _current_distance < 5) {
       _motor->stop();
       _current_distance = _reader->getValue(32);
+      _descriptor.update();
       _reader->setCorrection(_current_distance);
       _height = 0;
       _calibrating = false;

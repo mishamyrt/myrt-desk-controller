@@ -28,13 +28,13 @@ bool SensorReader::connected() {
 bool SensorReader::_measureDistance() {
   _sensor.rangingTest(&_measure, false);
   if (_measure.RangeMilliMeter <= _correction) {
+    _correction = _measure.RangeMilliMeter;
     _value = 0;
   } else {
     _value = _measure.RangeMilliMeter - _correction;
   }
   return _measure.RangeStatus != 4;
 }
-
 
 uint16_t SensorReader::getValue(uint8_t resolution) {
   if (!_connected || resolution > 32 || resolution == 0) {
