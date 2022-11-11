@@ -16,12 +16,22 @@ bool SensorReader::connect() {
   return false;
 }
 
+bool SensorReader::setCorrection(uint16_t correction) {
+  _correction = correction;
+  return true;
+}
+
 bool SensorReader::connected() {
   return _connected;
 }
 
 bool SensorReader::_measureDistance() {
   _sensor.rangingTest(&_measure, false);
+  if (_measure.RangeMilliMeter <= _correction) {
+    _value = 0;
+  } else {
+    _value = _measure.RangeMilliMeter - _correction;
+  }
   return _measure.RangeStatus != 4;
 }
 
@@ -32,7 +42,7 @@ uint16_t SensorReader::getValue(uint8_t resolution) {
   }
   if (resolution == 1) {
     if (_measureDistance()) {
-      return _measure.RangeMilliMeter;
+      return _value;
     }
     return 0;
   }
@@ -42,10 +52,10 @@ uint16_t SensorReader::getValue(uint8_t resolution) {
     if (!_measureDistance()) {
       return 0;
     }
-    values[_i] = _measure.RangeMilliMeter;
+    values[_i] = _value;
   }
   sortArray(values, resolution);
   uint16_t median = values[uint8_t(resolution / 2)];
   delete [] values;
-  return median + SENSOR_SURFACE_DISTANCE;
+  return median;
 }

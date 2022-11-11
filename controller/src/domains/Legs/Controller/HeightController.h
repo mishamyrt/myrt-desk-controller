@@ -15,24 +15,25 @@
 #define STOPPING_DISTANCE_UP 18
 #define STOPPING_DISTANCE_DOWN 10
 
-struct HeightState {
-  size_t height;
-};
-
 class HeightController {
  public:
   HeightController(Bekant *motor, SensorReader *reader);
 
   bool initialize();
-  size_t get();
+  bool handle();
+  bool calibrate();
   bool set(size_t height);
-  void handle();
+  size_t get();
+
 
  private:
   Bekant *_motor;
   SensorReader *_reader;
-  size_t _target_height;
+  size_t _height = BEKANT_MIN_HEIGHT;
+  size_t _target_height = 0;
   uint16_t _current_distance = 0;
-  HeightState _state;
-  bool _moving_to_target;
+  uint8_t _state = STATE_READY;
+  bool _calibrating = false;
+
+  void _calibrate();
 };
