@@ -4,9 +4,8 @@
 // License. See LICENSE.txt for details.
 
 #include "StoreController.h"
-#include <Blink.h>
 
-StoreController::StoreController() {
+void StoreController::initialize() {
   EEPROM.begin(STORE_SIZE);
 }
 
@@ -41,7 +40,7 @@ void StoreController::write(Stored *value) {
 
 bool StoreController::append(Stored *value) {
   if (_count == STORE_COUNT - 1
-    || static_cast<size_t>(_next_addr + value->size + 1) > EEPROM.length()) {
+    || (_next_addr + value->size + 1) > STORE_SIZE) {
     return false;
   }
   value->addr = _next_addr;

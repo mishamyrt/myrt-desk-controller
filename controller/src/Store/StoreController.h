@@ -10,14 +10,14 @@
 #include <Timer.h>
 #include "Stored.h"
 
-#define STORE_SIZE 256
+#define STORE_SIZE 512
 #define STORE_COUNT 16
 #define STORE_UPDATE_INTERVAL 5000
 
 class StoreController {
  public:
-  StoreController();
   void handle();
+  void initialize();
   bool isCorrect(Stored *value);
   void load(Stored *value);
   void write(Stored *value);
