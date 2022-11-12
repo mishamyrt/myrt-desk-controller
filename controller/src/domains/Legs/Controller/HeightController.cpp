@@ -29,8 +29,7 @@ bool HeightController::set(size_t height) {
   size_t mapped_height = height - BEKANT_MIN_HEIGHT;
   if (mapped_height == _height) {
     return true;
-  }
-  if (mapped_height < _height) {
+  } else if (mapped_height < _height) {
     _motor->moveDown();
   } else if (mapped_height > _height) {
     _motor->moveUp();
@@ -77,7 +76,7 @@ bool HeightController::handle() {
   if (_calibrating) {
     _calibrate();
   } else if (_state != STATE_READY) {
-    _current_distance = _reader->getValue(5);
+    _current_distance = _reader->getValue(8);
     if (
       (_state == STATE_MOVE_UP && _current_distance + STOPPING_DISTANCE_UP >= _target_height) ||
       (_state == STATE_MOVE_DOWN && _current_distance - STOPPING_DISTANCE_DOWN <= _target_height)
