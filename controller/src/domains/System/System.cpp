@@ -15,5 +15,12 @@ Domain SystemDomain(DOMAIN_SYSTEM, [](Domain *domain) {
     Loggr.setClient(r->packet());
     return true;
   });
+  domain->on(COMMAND_SYSTEM_FREE_HEAP, [](uint8_t *m, size_t l, CommanderResponse *r) {
+    uint32_t heap = ESP.getFreeHeap();
+    r->append(highByte(heap));
+    r->append(lowByte(heap));
+    r->flush();
+    return true;
+  });
 });
 
