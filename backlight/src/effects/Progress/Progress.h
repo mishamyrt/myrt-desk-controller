@@ -22,7 +22,7 @@ class ProgressEffect : public Effect {
   TimeProgress _color_progress = TimeProgress();
   CRGB _background_color = CRGB::Black;
   CRGB _highlight_color;
-  uint8_t _glow_side = 50;
+  uint8_t _glow_side = 30;
 
   void _drawIntro(Strip *strip);
   void _drawOutro(EffectStateController *host, Strip *strip);

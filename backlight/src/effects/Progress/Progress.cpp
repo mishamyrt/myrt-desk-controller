@@ -110,11 +110,11 @@ void ProgressEffect::_drawColorChange(
 }
 
 void ProgressEffect::_drawGlow(Strip *strip) {
-  int progress = _progress.value();
+  int progress = strip->length - _progress.value();
   strip->set(_background_color);
   strip->set(_highlight_color, progress);
   CRGB color;
-  for (int i = 1; i <= _glow_side; i++) {
+  for (int i = _glow_side; i >= 1; i--) {
     color = blend_colors(
       _background_color,
       _highlight_color,
