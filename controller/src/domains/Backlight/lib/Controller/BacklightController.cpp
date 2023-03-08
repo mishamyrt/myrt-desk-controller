@@ -81,13 +81,8 @@ bool BacklightController::setTemperature(uint8_t temperature) {
 bool BacklightController::powerOn() {
   _state.enabled = true;
   _descriptor.update();
-  return _data->send(COMMAND_SET_BRIGHTNESS, _state.brightness)
-    && _data->send(
-      COMMAND_SET_COLOR,
-      _state.color.r,
-      _state.color.g,
-      _state.color.b
-    );
+  _applyState();
+  return true;
 }
 
 bool BacklightController::powerOff() {
