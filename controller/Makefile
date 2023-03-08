@@ -26,7 +26,7 @@ flash:
 	pio run -t upload
 
 ota: $(FIRMWARE_PATH)
-	myrt_desk flash-controller $(FIRMWARE_PATH)
+	myrt_desk flash_controller $(FIRMWARE_PATH)
 
 $(FIRMWARE_PATH): $(SRC)
 	pio run -e esp32dev
