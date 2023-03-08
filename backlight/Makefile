@@ -9,7 +9,7 @@ compile:
 
 .PHONY: ota
 ota: compile
-	myrt_desk flash-backlight .pio/build/nanoatmega328/firmware.hex
+	myrt_desk flash_backlight .pio/build/nanoatmega328/firmware.hex
 
 .PHONY: clear
 clear:

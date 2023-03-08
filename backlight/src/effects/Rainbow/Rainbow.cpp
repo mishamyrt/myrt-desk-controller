@@ -51,7 +51,7 @@ void RainbowEffect::finalize(EffectStateController *controller) {
 
 void RainbowEffect::onColorUpdate(EffectStateController *controller) {
   // Just proof new color for next effect. This effect ignores defined color
-    controller->onColorUpdated();
+  controller->onColorUpdated();
 }
 
 RainbowEffect Rainbow;

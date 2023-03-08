@@ -9,3 +9,4 @@
 #include "Rainbow/Rainbow.h"
 #include "Progress/Progress.h"
 #include "Ambient/Ambient.h"
+#include "GradientFill/GradientFill.h"

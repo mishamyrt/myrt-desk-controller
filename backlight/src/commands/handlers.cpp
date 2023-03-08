@@ -70,6 +70,9 @@ bool handleSetEffect(uint8_t *message, uint8_t length) {
         return Animator.setEffectArgs(&message[1], length - 1);
       }
       break;
+    case COMMAND_EFFECT_GRADIENT:
+      Animator.setEffect(&GradientFill);
+      break;
     default:
       return false;
   }
