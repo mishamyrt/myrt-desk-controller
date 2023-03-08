@@ -48,8 +48,10 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   Store.initialize();
   blink(1);
-  WiFi.mode(WIFI_STA);
+  WiFi.disconnect(true, true);
+  delay(500);
   WiFi.setHostname(hostname.c_str());
+  WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(300);
