@@ -25,6 +25,7 @@
 AsyncUDP udp;
 DomainCommander Commander;
 
+String hostname = "MyrtDesk";
 const uint16_t port = 11011;
 
 void handlePacket(AsyncUDPPacket packet) {
@@ -47,6 +48,8 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   Store.initialize();
   blink(1);
+  WiFi.mode(WIFI_STA);
+  WiFi.setHostname(hostname.c_str());
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(300);
