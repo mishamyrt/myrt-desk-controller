@@ -40,7 +40,6 @@ bool AmbientEffect::setArguments(EffectStateController *controller, uint8_t *arg
   if (length != (args[0] * 2) + 1) {
     return false;
   }
-  // 3, 0, 33, 33, 66, 66, 99
   _zones_count = 0;
   for (uint8_t i = 1; i < length; i += 2) {
     _zones[_zones_count].start = args[i];
