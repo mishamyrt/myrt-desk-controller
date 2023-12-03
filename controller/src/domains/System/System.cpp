@@ -1,6 +1,5 @@
 #include "System.h"
 #include "constants.h"
-#include <Loggr.h>
 #include <Arduino.h>
 
 Domain SystemDomain(DOMAIN_SYSTEM, [](Domain *domain) {

@@ -8,7 +8,6 @@
 #include <Arduino.h>
 #include <Timer.h>
 #include <Stopwatch.h>
-#include <Loggr.h>
 #include <Store.h>
 #include "../Bekant/Bekant.h"
 #include "../ToF/SensorReader.h"

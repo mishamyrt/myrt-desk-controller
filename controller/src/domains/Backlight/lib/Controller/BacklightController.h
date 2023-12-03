@@ -6,7 +6,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include <Loggr.h>
 #include <Store.h>
 #include "../DapMaster/DapMaster.h"
 #include "../AVRLord/AVRLord.h"

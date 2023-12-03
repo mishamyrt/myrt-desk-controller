@@ -4,7 +4,6 @@
 // License. See LICENSE.txt for details.
 
 #include "HeightController.h"
-#include <Loggr.h>
 #include <config.h>
 
 HeightController::HeightController(Bekant *motor, SensorReader *reader) {

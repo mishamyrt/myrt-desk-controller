@@ -7,7 +7,6 @@
 
 #include "Arduino.h"
 #include "FirmwareReader.h"
-#include "Loggr.h"
 #include "./include/commands.h"
 
 class AVRUpdater {
