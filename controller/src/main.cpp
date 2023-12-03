@@ -15,7 +15,7 @@
 #include <OTA.h>
 #include <Store.h>
 
-// New domains
+#include <AsyncSocketServer.h>
 #include <DomainCommander.h>
 #include <BacklightDomain.h>
 #include <LegsDomain.h>
@@ -23,21 +23,25 @@
 
 // Server
 AsyncUDP udp;
-DomainCommander Commander;
+SocketServer server;
+DomainCommander commander;
 
 String hostname = "MyrtDesk";
 const uint16_t port = 11011;
 
 void handlePacket(AsyncUDPPacket packet) {
-  Commander.handle(&packet);
+  server.handle(&packet);
 }
 
 void setupServer() {
-  Loggr.setProtocol(&udp);
-  // New UDP binary domains
-  Commander.add(&BacklightDomain);
-  Commander.add(&LegsDomain);
-  Commander.add(&SystemDomain);
+  // Setup domains
+  commander.add(&BacklightDomain);
+  commander.add(&LegsDomain);
+  commander.add(&SystemDomain);
+  // Setup server bindings
+  server.setHandler(&commander);
+  server.attach(&udp);
+  // Start server
   if(udp.listen(port)) {
     udp.onPacket(handlePacket);
   }

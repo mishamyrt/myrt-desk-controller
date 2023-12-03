@@ -1,15 +1,14 @@
 #pragma once
 
 #include <functional>
-#include <Loggr.h>
 #include <AsyncUDP.h>
-#include "Response.h"
+#include "SocketResponse.h"
 
 #define DOMAIN_MAX_COMANDS 16
 
 typedef uint8_t Code;
 
-typedef std::function<bool(uint8_t *message, size_t length, CommanderResponse *resp)> AsyncCommandHandler;
+typedef std::function<bool(uint8_t *message, size_t length, SocketResponse *resp)> AsyncCommandHandler;
 
 struct Command {
   Code code;
@@ -33,7 +32,7 @@ class Domain {
 
     bool on(uint8_t code, AsyncCommandHandler handle);
 
-    bool handle(uint8_t *message, size_t length, CommanderResponse *resp);
+    bool handle(uint8_t *message, size_t length, SocketResponse *resp);
 
   private:
     Command _commands[DOMAIN_MAX_COMANDS];

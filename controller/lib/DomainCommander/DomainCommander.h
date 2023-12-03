@@ -7,18 +7,17 @@
 
 #include "AsyncUDP.h"
 #include "Domain.h"
+#include "SocketMessageHandler.h"
 
 #define COMMANDER_DOMAINS_MAX 4
 
 typedef std::function<void(Domain *domain)> DomainInitializer;
 
-class DomainCommander {
+class DomainCommander: public SocketMessageHandler {
   public:
-    DomainCommander() {
+    DomainCommander() {}
 
-    }
-    void handle(AsyncUDPPacket *packet);
-
+    bool handle(uint8_t *message, size_t length, SocketResponse *resp);
     bool add(Domain *domain);
 
   private:
