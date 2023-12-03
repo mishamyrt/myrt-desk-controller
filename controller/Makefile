@@ -1,35 +1,17 @@
-all: compile
+all: build
 
 FIRMWARE_PATH = .pio/build/esp32dev/firmware.bin
-SRC := \
-	$(wildcard include/*.h) \
-	$(wildcard src/*.cpp) \
-	$(wildcard src/*/*.cpp) \
-	$(wildcard src/*/*/*.cpp) \
-	$(wildcard src/*/*/*/*/*.cpp) \
-	$(wildcard src/*/*/*/*/*/*.cpp) \
-	$(wildcard src/*.h) \
-	$(wildcard src/*/*.h) \
-	$(wildcard src/*/*/*.h) \
-	$(wildcard src/*/*/*/*/*.h) \
-	$(wildcard src/*/*/*/*/*/*.h) \
-	$(wildcard lib/*/*.cpp) \
-	$(wildcard lib/*/*/*.cpp) \
-	$(wildcard lib/*/*/*/*.cpp) \
-	$(wildcard lib/*/*.h) \
-	$(wildcard lib/*/*/*.h) \
-	$(wildcard lib/*/*/*/*.h) \
 
-compile: $(FIRMWARE_PATH)
-.PHONY: flash
-flash:
-	pio run -t upload
+.PHONY: build
+build:
+	pio run -e esp32dev
 
-ota: $(FIRMWARE_PATH)
+ota: build
 	myrt_desk flash_controller $(FIRMWARE_PATH)
 
-$(FIRMWARE_PATH): $(SRC)
-	pio run -e esp32dev
+.PHONY: espota
+espota:
+	pio run -t upload
 
 .PHONY: clear
 clear:
