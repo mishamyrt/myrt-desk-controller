@@ -50,7 +50,6 @@ ClientIndex SocketServer::_addClient(AsyncUDPPacket *packet) {
       _clients[i].ip = packet->remoteIP();
       _clients[i].port = packet->remotePort();
       _clients[i].active = true;
-      _clients[i].updatedAt = millis();
       return i;
     }
   }
