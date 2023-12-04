@@ -20,6 +20,7 @@ void SocketServer::handle(AsyncUDPPacket *packet) {
   if (clientIndex == -1) {
     clientIndex = _addClient(packet);
   }
+  _clients[clientIndex].updatedAt = millis();
 
   SocketResponse *resp = new SocketResponse(
     message[1],
@@ -44,10 +45,12 @@ void SocketServer::setHandler(SocketMessageHandler *handler) {
 ClientIndex SocketServer::_addClient(AsyncUDPPacket *packet) {
   std::lock_guard<std::mutex> lck(clientChangeLock);
   for (ClientIndex i = 0; i < SOCKET_SERVER_MAX_CLIENTS; i++) {
-    if (!_clients[i].active) {
+    unsigned long timeDiff = millis() - _clients[i].updatedAt;
+    if (!_clients[i].active || timeDiff > SOCKET_SERVER_CLIENT_TIMEOUT) {
       _clients[i].ip = packet->remoteIP();
       _clients[i].port = packet->remotePort();
       _clients[i].active = true;
+      _clients[i].updatedAt = millis();
       return i;
     }
   }
