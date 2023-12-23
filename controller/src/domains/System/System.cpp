@@ -18,7 +18,7 @@ Domain SystemDomain(DOMAIN_SYSTEM, [](Domain *domain) {
     return true;
   });
   domain->on(COMMAND_SYSTEM_FREE_HEAP, [](uint8_t *m, size_t l, SocketResponse *r) {
-    r->broadcast(freeHeap);
+    r->reply(freeHeap);
     return true;
   });
 });

@@ -25,7 +25,7 @@ Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
     if (l > 0) {
       return false;
     }
-    r->broadcast(legsState);
+    r->reply(legsState);
     return true;
   });
   domain->on(COMMAND_LEGS_SET_HEIGHT, [](uint8_t *m, size_t l, SocketResponse *r) {
@@ -34,9 +34,6 @@ Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
     }
     size_t height = (m[0] << 8) + m[1];
     bool success = Height.set(height);
-    if (success) {
-      r->broadcast(legsState);
-    }
     return success;
   });
   domain->on(COMMAND_LEGS_CALIBRATE, [](uint8_t *m, size_t l, SocketResponse *r) {

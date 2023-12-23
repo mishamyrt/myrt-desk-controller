@@ -7,7 +7,7 @@
 
 #define SOCKET_RESPONSE_MAX_LENGTH 64
 #define SOCKET_RESPONSE_PADDING 3
-#define SocketBroadcastHandler std::function<uint8_t(SocketResponse *resp)>
+#define SocketReplyHandler std::function<uint8_t(SocketResponse *resp)>
 
 typedef uint8_t MessageLength;
 
@@ -25,7 +25,7 @@ class SocketResponse {
 
     bool append(uint8_t data);
     void send_boolean(bool value);
-    void broadcast(SocketBroadcastHandler handle);
+    void reply(SocketReplyHandler handle);
 
   private:
     uint8_t _command;

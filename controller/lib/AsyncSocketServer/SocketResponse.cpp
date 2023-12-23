@@ -34,17 +34,12 @@ void SocketResponse::send_boolean(bool value) {
   _send();
 }
 
-void SocketResponse::broadcast(SocketBroadcastHandler handle) {
+void SocketResponse::reply(SocketReplyHandler handle) {
   _clear();
   uint8_t command = handle(this);
   _set_length();
   _message[2] = command;
-  for (ClientIndex i = 0; i < SOCKET_SERVER_MAX_CLIENTS; i++) {
-    if (_clients[i].active) {
-      _send(i);
-    }
-  }
-  _message[2] = _command;
+  _send();
 }
 
 void SocketResponse::_set_length() {
