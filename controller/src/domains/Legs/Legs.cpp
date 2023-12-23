@@ -11,11 +11,11 @@ Bekant Motors(PIN_BEKANT_UP, PIN_BEKANT_DOWN);
 SensorReader HeightReader = SensorReader();
 HeightController Height(&Motors, &HeightReader);
 
-void broadcastLegsState(SocketResponse *r) {
+uint8_t legsState(SocketResponse *r) {
   size_t height = Height.get();
   r->append(highByte(height));
   r->append(lowByte(height));
-  r->broadcast();
+  return COMMAND_LEGS_BROADCAST_STATE;
 }
 
 Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
@@ -25,7 +25,7 @@ Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
     if (l > 0) {
       return false;
     }
-    broadcastLegsState(r);
+    r->broadcast(legsState);
     return true;
   });
   domain->on(COMMAND_LEGS_SET_HEIGHT, [](uint8_t *m, size_t l, SocketResponse *r) {
@@ -35,19 +35,9 @@ Domain LegsDomain(DOMAIN_LEGS, [](Domain *domain) {
     size_t height = (m[0] << 8) + m[1];
     bool success = Height.set(height);
     if (success) {
-      broadcastLegsState(r);
+      r->broadcast(legsState);
     }
     return success;
-  });
-  domain->on(COMMAND_LEGS_GET_SENSOR_LENGTH, [](uint8_t *m, size_t l, SocketResponse *r) {
-    if (l != 0 || !HeightReader.connect()) {
-      return false;
-    }
-    uint16_t height = HeightReader.getValue(1);
-    r->append(highByte(height));
-    r->append(lowByte(height));
-    r->broadcast();
-    return true;
   });
   domain->on(COMMAND_LEGS_CALIBRATE, [](uint8_t *m, size_t l, SocketResponse *r) {
     if (l != 0) {

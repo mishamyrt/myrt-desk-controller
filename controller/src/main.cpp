@@ -29,21 +29,16 @@ DomainCommander commander;
 String hostname = "MyrtDesk";
 const uint16_t port = 11011;
 
-void handlePacket(AsyncUDPPacket packet) {
-  server.handle(&packet);
-}
-
 void setupServer() {
   // Setup domains
   commander.add(&BacklightDomain);
   commander.add(&LegsDomain);
   commander.add(&SystemDomain);
-  // Setup server bindings
-  server.setHandler(&commander);
-  server.attach(&udp);
+
   // Start server
   if(udp.listen(port)) {
-    udp.onPacket(handlePacket);
+    server.attach(&udp);
+    server.setHandler(&commander);
   }
 }
 

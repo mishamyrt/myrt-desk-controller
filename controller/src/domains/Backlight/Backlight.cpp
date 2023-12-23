@@ -6,7 +6,7 @@ AVRLord LightAVR(PIN_LIGHTSTRIP_RESET);
 BacklightController Backlight(&LightData, &LightAVR);
 FirmwareReader Reader = FirmwareReader();
 
-void broadcastBacklightState(SocketResponse *r) {
+uint8_t backlightState(SocketResponse *r) {
   RGB color = Backlight.color();
   r->append(Backlight.enabled() ? 1 : 0);
   r->append(Backlight.effect());
@@ -16,7 +16,7 @@ void broadcastBacklightState(SocketResponse *r) {
   r->append(color.b);
   r->append(Backlight.temperature());
   r->append(Backlight.brightness());
-  r->broadcast();
+  return COMMAND_BACKLIGHT_BROADCAST_STATE;
 }
 
 Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
@@ -26,7 +26,7 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     if (l > 0) {
       return false;
     }
-    broadcastBacklightState(r);
+    r->broadcast(backlightState);
     return true;
   });
   domain->on(COMMAND_BACKLIGHT_SET_COLOR, [](uint8_t *m, size_t l, SocketResponse *r) {
@@ -35,7 +35,7 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     }
     bool success = Backlight.setColor(m[0], m[1], m[2]);
     if (success) {
-      broadcastBacklightState(r);
+      r->broadcast(backlightState);
     }
     return success;
   });
@@ -45,7 +45,7 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     }
     bool success = Backlight.setBrightness(m[0]);
     if (success) {
-      broadcastBacklightState(r);
+      r->broadcast(backlightState);
     }
     return success;
   });
@@ -55,7 +55,7 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
     }
     bool success = Backlight.setTemperature(m[0]);
     if (success) {
-      broadcastBacklightState(r);
+      r->broadcast(backlightState);
     }
     return success;
   });
@@ -70,7 +70,7 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
       success = Backlight.powerOn();
     }
     if (success) {
-      broadcastBacklightState(r);
+      r->broadcast(backlightState);
     }
     return success;
   });
@@ -83,7 +83,7 @@ Domain BacklightDomain(DOMAIN_BACKLIGHT, [](Domain *domain) {
       success = Backlight.setEffect(m[0], &m[1], l - 1);
     }
     if (success) {
-      broadcastBacklightState(r);
+      r->broadcast(backlightState);
     }
     return success;
   });

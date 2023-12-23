@@ -7,6 +7,10 @@ void SocketServer::attach(AsyncUDP *server) {
   for (ClientIndex i = 0; i < SOCKET_SERVER_MAX_CLIENTS; i++) {
     _clients[i].active = false;
   }
+  _udp = server;
+  _udp->onPacket([&](AsyncUDPPacket packet) {
+    handle(&packet);
+  });
 }
 
 void SocketServer::handle(AsyncUDPPacket *packet) {
@@ -34,7 +38,7 @@ void SocketServer::handle(AsyncUDPPacket *packet) {
   if (_handler != NULL) {
     success = _handler->handle(&message[1], payload_length, resp);
   }
-  resp->sendBoolean(success);
+  resp->send_boolean(success);
   delete[] resp;
 }
 

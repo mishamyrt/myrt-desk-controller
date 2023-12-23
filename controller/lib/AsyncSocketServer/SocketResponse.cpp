@@ -14,6 +14,7 @@ SocketResponse::SocketResponse(
   _index = index;
   _clients = clients;
   _udp = udp;
+  _command = command;
 }
 
 bool SocketResponse::append(uint8_t data) {
@@ -26,39 +27,45 @@ bool SocketResponse::append(uint8_t data) {
   return true;
 }
 
-void SocketResponse::sendBoolean(bool value) {
-  _message_length = 1;
-  _message[SOCKET_RESPONSE_PADDING] = value ? 0 : 1;
-  flush();
+void SocketResponse::send_boolean(bool value) {
+  _clear();
+  append(value ? 0 : 1);
+  _set_length();
+  _send();
 }
 
-void SocketResponse::flush() {
+void SocketResponse::broadcast(SocketBroadcastHandler handle) {
+  _clear();
+  uint8_t command = handle(this);
   _set_length();
-  _send(_index);
-  sent = true;
-}
-
-void SocketResponse::broadcast() {
-  _set_length();
+  _message[2] = command;
   for (ClientIndex i = 0; i < SOCKET_SERVER_MAX_CLIENTS; i++) {
-    if (!_clients[i].active) {
-      continue;
+    if (_clients[i].active) {
+      _send(i);
     }
-    _clients[i].active = _send(i);
   }
-  sent = true;
+  _message[2] = _command;
 }
 
 void SocketResponse::_set_length() {
   _message[0] = _message_length + SOCKET_RESPONSE_PADDING - 1;
 }
 
-bool SocketResponse::_send(ClientIndex i) {
+void SocketResponse::_send(ClientIndex i) {
   std::lock_guard<std::mutex> lck(socketWriteLock);
-  return _udp->writeTo(
+  SocketClient *client = &_clients[i];
+  client->active = _udp->writeTo(
     &_message[0],
     _message_length + SOCKET_RESPONSE_PADDING,
-    _clients[i].ip,
-    _clients[i].port
+    client->ip,
+    client->port
   ) > 0;
+}
+
+void SocketResponse::_send() {
+  _send(_index);
+}
+
+void SocketResponse::_clear() {
+  _message_length = 0;
 }

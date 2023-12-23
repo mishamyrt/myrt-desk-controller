@@ -7,6 +7,8 @@
 
 #define SOCKET_RESPONSE_MAX_LENGTH 64
 #define SOCKET_RESPONSE_PADDING 3
+#define SocketBroadcastHandler std::function<uint8_t(SocketResponse *resp)>
+
 typedef uint8_t MessageLength;
 
 class SocketResponse {
@@ -22,11 +24,11 @@ class SocketResponse {
     );
 
     bool append(uint8_t data);
-    void sendBoolean(bool value);
-    void flush();
-    void broadcast();
+    void send_boolean(bool value);
+    void broadcast(SocketBroadcastHandler handle);
 
   private:
+    uint8_t _command;
     uint8_t _message[SOCKET_RESPONSE_MAX_LENGTH];
     MessageLength _message_length = 0;
     ClientIndex _index;
@@ -34,5 +36,7 @@ class SocketResponse {
     AsyncUDP *_udp;
 
     void _set_length();
-    bool _send(ClientIndex i);
+    void _send(ClientIndex i);
+    void _send();
+    void _clear();
 };
